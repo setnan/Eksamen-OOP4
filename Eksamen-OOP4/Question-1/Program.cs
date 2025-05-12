@@ -20,12 +20,12 @@ namespace Question_1
                     // 1. Konverter til ASCII-streng
                     string asciiDigits = converter.ConvertToAscii(input);
 
-                    // 2. Beregn sjekksiffer
+                    // 2. Beregner sjekksiffer
                     int checkDigit = calculator.CalculateCheckDigit(asciiDigits);
                     
                     // Console.WriteLine($"Sjekksiffer: {checkDigit}");
                     
-                    // 3. Slå sammen og vis sluttresultat
+                    // 3. Slår sammen og vis sluttresultat
                     string finalOutput = asciiDigits + checkDigit;
                     Console.WriteLine($"Ferdig streng med sjekksiffer: {finalOutput}");
 
