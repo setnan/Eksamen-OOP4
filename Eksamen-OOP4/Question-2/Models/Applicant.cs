@@ -1,8 +1,8 @@
-﻿namespace Question_2.Models;
+namespace Question_2.Models;
 
 public class Applicant
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public Position DesireedPosition { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public required Position DesireedPosition { get; set; }
 }

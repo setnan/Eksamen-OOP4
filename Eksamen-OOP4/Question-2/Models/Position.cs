@@ -1,9 +1,9 @@
-﻿namespace Question_2.Models;
+namespace Question_2.Models;
 
 public class Position
 {
-    public string Title { get; set; }
-    public string Specialization { get; set; }
-    public string Seniority { get; set; }
-    public List<string> Skills { get; set; }
+    public required string Title { get; set; }
+    public required string Specialization { get; set; }
+    public required string Seniority { get; set; }
+    public required List<string> Skills { get; set; }
 }
