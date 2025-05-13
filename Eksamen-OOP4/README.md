@@ -43,23 +43,84 @@ Denne løsningen viser ikke bare en implementasjon av Luhn-algoritmen, men også
 
 ## Oppsett og bruk
 
-1. Åpne løsningen i Visual Studio eller annet .NET-kompatibelt utviklingsmiljø
-2. Bygg løsningen med .NET 6.0 eller nyere
-3. For å kjøre Question-1:
-   - Naviger til Question-1 mappen
-   - Kjør `dotnet run` eller start direkte fra utviklingsmiljøet
-   - Skriv inn et ord/navn og se den visuelle konverteringen til ASCII med sjekksiffer
-   - Skriv 'Q' for å avslutte programmet
-4. For å kjøre Question-2:
-   - Naviger til Question-2 mappen
-   - Kjør `dotnet run` eller start direkte fra utviklingsmiljøet
-   - Bruk piltastene for å navigere i menyen og Enter for å velge
-
 ### Forutsetninger
+
 - .NET 6.0 SDK eller nyere
-- NuGet-pakker:
-  - Spectre.Console (for Question-1)
-- Internettilkobling (for Question-2 API-kommunikasjon)
+  - Last ned fra: https://dotnet.microsoft.com/download
+  - Verifiser installasjonen ved å kjøre `dotnet --version` i kommandolinjen
+- Utviklingsmiljø (et av følgende):
+  - Visual Studio 2022 eller nyere
+  - Visual Studio Code med C# Extension
+  - JetBrains Rider
+- Internettilkobling for Question-2 (API-kommunikasjon)
+
+### Installasjon
+
+#### Klone eller last ned prosjektet
+```
+git clone <repository-url>
+# Eller last ned og pakk ut ZIP-filen fra lö
+cd Eksamen-OOP4
+```
+
+#### Installere avhengigheter
+
+```bash
+# For Question-1 (installerer Spectre.Console)
+cd Question-1
+dotnet restore
+
+# For Question-2
+cd ../Question-2
+dotnet restore
+```
+
+### Bygge prosjektene
+
+```bash
+# Bygg Question-1
+cd Question-1
+dotnet build
+
+# Bygg Question-2
+cd ../Question-2
+dotnet build
+```
+
+### Kjøre applikasjonene
+
+#### Question-1 (ASCII og Luhn-algoritmen)
+
+```bash
+cd Question-1
+dotnet run
+```
+
+Etter oppstart:
+1. Skriv inn et ord eller navn når du blir bedt om det
+2. Se den visuelle fremstillingen av ASCII-konverteringen
+3. Se resultatet av Luhn-algoritmen med sjekksifferet
+4. Skriv 'Q' for å avslutte programmet
+
+#### Question-2 (API og matching-system)
+
+```bash
+cd Question-2
+dotnet run
+```
+
+Etter oppstart:
+1. Applikasjonen vil automatisk hente data fra API-et
+2. Bruk piltastene (↑↓) for å navigere i menyen
+3. Trykk Enter for å velge et menyvalg
+4. Bruk menyalternativene for å utforske matchinger mellom søkere og stillinger
+
+### Problemer med API-tilkobling?
+
+Hvis du opplever problemer med API-tilkoblingen i Question-2:
+1. Sjekk at internettforbindelsen din er aktiv
+2. Verifiser at API-nøkkelen i `appsettings.json` er gyldig
+3. Kontroller at API-endepunktet er tilgjengelig
 
 ## Prosjektstruktur
 
@@ -68,6 +129,45 @@ Prosjektet er organisert i følgende moduler:
 - **Models/**: Inneholder klassene som representerer datamodellene (Applicant, Position, ExamData)
 - **Services/**: Inneholder tjenester for API-kommunikasjon og matching-algoritmer
 - **UI/**: Inneholder klasser for presentasjon og brukerinteraksjon
+- **Configuration/**: Inneholder konfigurasjonsklasser for å laste innstillinger fra appsettings.json
+
+### Visuell mappestruktur
+
+```
+Eksamen-OOP4/
+├── Eksamen-OOP4.sln         # Løsningsfil som inneholder begge prosjekter
+│
+├── README.md                # Denne dokumentasjonsfilen
+│
+├── Question-1/              # Delprosjekt 1: ASCII og Luhn-algoritme
+│   ├── Configuration/
+│   │   └── AppConfig.cs     # Konfigurasjonshåndtering
+│   ├── UI/
+│   │   └── UIHelper.cs      # UI-abstraksjon
+│   ├── AsciiConverter.cs    # Konvertering fra tekst til ASCII
+│   ├── LuhnCalculator.cs    # Implementasjon av Luhn-algoritmen
+│   ├── Program.cs           # Applikasjonens startpunkt
+│   ├── Question-1.csproj    # Prosjektfil med avhengigheter
+│   └── appsettings.json     # Konfigurasjonsfil
+│
+└── Question-2/              # Delprosjekt 2: API og matching-system
+    ├── Configuration/
+    │   └── AppConfig.cs     # Konfigurasjonshåndtering for API-innstillinger
+    ├── Models/
+    │   ├── Applicant.cs     # Modell for jobbsøkere
+    │   ├── Position.cs      # Modell for stillinger
+    │   └── ExamData.cs      # Container-modell for API-responsen
+    ├── Services/
+    │   ├── ExamTaskService.cs # API-kommunikasjon
+    │   └── MatchService.cs  # Matching-algoritme
+    ├── UI/
+    │   └── Menu.cs          # Menystruktur og brukerinteraksjon
+    ├── Program.cs           # Applikasjonens startpunkt
+    ├── Question-2.csproj    # Prosjektfil med avhengigheter
+    └── appsettings.json     # Konfigurasjonsfil for API-detaljer
+```
+
+Denne strukturen følger prinsippet om separasjon av ansvar og modularitet, hvor hver komponent har et tydelig avgrenset ansvarsområde.
 
 ## API-informasjon
 
@@ -80,4 +180,11 @@ API-nøkkelen som kreves er inkludert i koden.
 
 ## AI-bruk
 
-[Her kan du legge til informasjon om eventuell bruk av AI-assistenter i prosjektet, hvis aktuelt]
+I dette prosjektet har jeg benyttet AI-assistanse på følgende måter:
+
+- **Strukturell veiledning**: Cascade AI ble brukt for å få forslag til arkitektur og modularisering
+- **Kodegjennomgang**: AI-assistenten hjalp med å identifisere potensielle problemer som nullreferanser og forbedringsmuligheter
+- **Implementasjon av konfigurasjonssystem**: Fikk assistanse for å implementere konfigurasjonssystem i begge delprosjekter
+- **Dokumentasjonsforbedringer**: README-filen ble utarbeidet med hjelp fra AI
+
+All kode har blitt gjennomgått manuelt, og jeg har sikret at implementasjonene er i tråd med oppgavekravene
