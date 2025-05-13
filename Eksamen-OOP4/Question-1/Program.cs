@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Question_1;
 
 namespace Question_1
@@ -23,7 +23,7 @@ namespace Question_1
                     // 2. Beregner sjekksiffer
                     int checkDigit = calculator.CalculateCheckDigit(asciiDigits);
                     
-                    // Console.WriteLine($"Sjekksiffer: {checkDigit}");
+                    Console.WriteLine($"Sjekksiffer: {checkDigit}");
                     
                     // 3. Slår sammen og vis sluttresultat
                     string finalOutput = asciiDigits + checkDigit;

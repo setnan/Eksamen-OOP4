@@ -1,11 +1,11 @@
-﻿namespace Question_1;
+namespace Question_1;
 
 public class LuhnCalculator
 {
     public int CalculateCheckDigit(string asciiDigits)
     {
         int sum = 0;
-        bool alternate = true; // ← fiksen er her
+        bool alternate = true; 
 
         for (int i = asciiDigits.Length - 1; i >= 0; i--)
         {

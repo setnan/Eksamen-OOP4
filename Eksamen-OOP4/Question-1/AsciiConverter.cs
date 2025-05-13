@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 
 namespace Question_1;
 
@@ -9,7 +9,7 @@ public class AsciiConverter
         StringBuilder asciiStringBuilder = new StringBuilder();
         foreach (char character in input)
         {
-            asciiStringBuilder.Append((int)character);
+            asciiStringBuilder.Append((int)character);  
         }
         string asciiString = asciiStringBuilder.ToString();
         Console.WriteLine($"ASCII verdi for '{input}': {asciiString}");
