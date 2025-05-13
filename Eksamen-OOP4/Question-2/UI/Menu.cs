@@ -38,7 +38,7 @@ public class Menu
                     Console.ReadKey();
                     break;
                 case 2:
-                    VelgStillingstittel(); // Den håndterer alt selv!
+                    VelgStillingstittel();
                     break;
                 case 3:
                     Console.WriteLine("Avslutter...");
@@ -49,7 +49,7 @@ public class Menu
 
     private void VisAlleSøkere()
     {
-        var alleSøkere = _matches
+        List<Applicant> alleSøkere = _matches
             .Select(m => m.Applicant)
             .Distinct()
             .ToList();
@@ -57,9 +57,9 @@ public class Menu
         Console.Clear();
         Console.WriteLine($"Viser {alleSøkere.Count} søkere:\n");
 
-        foreach (var applicant in alleSøkere)
+        foreach (Applicant applicant in alleSøkere)
         {
-            var desired = applicant.DesireedPosition;
+            Position desired = applicant.DesireedPosition;
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"{applicant.FirstName} {applicant.LastName}");
@@ -75,7 +75,7 @@ public class Menu
     {
         Console.Clear();
         Console.WriteLine($"Totalt {_matches.Count} matcher:\n");
-        foreach (var (applicant, position) in _matches)
+        foreach ((Applicant applicant, Position position) in _matches)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write($"{applicant.FirstName} {applicant.LastName}");
@@ -88,7 +88,7 @@ public class Menu
     {
         while (true)
         {
-            var titler = _matches
+            List<string> titler = _matches
                 .Select(m => m.MatchedPosition.Title)
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .OrderBy(t => t)
@@ -108,13 +108,12 @@ public class Menu
 
             if (valgtIndex == titler.Count - 1)
             {
-                // Brukeren valgte "Gå tilbake"
                 return;
             }
 
             string valgtTittel = titler[valgtIndex];
 
-            var relevanteMatchinger = _matches
+            List<(Applicant Applicant, Position MatchedPosition)> relevanteMatchinger = _matches
                 .Where(m => m.MatchedPosition.Title.Equals(valgtTittel, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
@@ -127,7 +126,7 @@ public class Menu
             }
             else
             {
-                foreach (var (applicant, position) in relevanteMatchinger)
+                foreach ((Applicant applicant, Position position) in relevanteMatchinger)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write($"{applicant.FirstName} {applicant.LastName}");
@@ -137,17 +136,14 @@ public class Menu
             }
 
             Console.WriteLine("\nTrykk 'M' for hovedmeny, eller en annen tast for å velge ny stillingstittel...");
-            var key = Console.ReadKey(true);
+            ConsoleKeyInfo key = Console.ReadKey(true);
 
             if (key.Key == ConsoleKey.M)
             {
-                return; 
+                return;
             }
         }
     }
-
-
-
 
     private int ShowInteractiveMenu(List<string> options, string title)
     {
