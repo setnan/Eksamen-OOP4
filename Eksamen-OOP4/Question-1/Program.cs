@@ -1,5 +1,7 @@
 using System;
 using Question_1;
+using Question_1.Configuration;
+using Question_1.UI;
 using Spectre.Console;
 
 namespace Question_1
@@ -8,81 +10,47 @@ namespace Question_1
     {
         static void Main(string[] args)
         {
-            AnsiConsole.Write(
-                new Rule("[green]ASCII og Luhn Algoritme Kalkulator[/]")
-                {
-                    Justification = Justify.Left,
-                    Style = Style.Parse("grey")
-                });
+            // Last konfigurasjon
+            var config = AppConfig.Load();
+            var uiConfig = config.UI;
+            
+            // Vis header
+            UIHelper.DisplayHeader(config.AppSettings);
 
+            // Initialiser konverterere
+            var converter = new AsciiConverter();
+            var calculator = new LuhnCalculator();
 
-
-            AnsiConsole.MarkupLine("Dette programmet [bold]konverterer[/] tekst til [italic]ASCII-verdier[/] og beregner et sjekksiffer ved hjelp av [underline]Luhn-algoritmen[/].\n");
-
-            AsciiConverter converter = new AsciiConverter();
-            LuhnCalculator calculator = new LuhnCalculator();
-
+            // Hovedloop
             while (true)
             {
-                string input = AnsiConsole.Prompt(
-                    new TextPrompt<string>("[bold]Skriv inn et ord eller navn (kun ASCII-tegn) eller tast Q for å avslutte:[/]")
-                        .PromptStyle("green")
-                        .Validate(text =>
-                        {
-                            return !string.IsNullOrWhiteSpace(text)
-                                ? ValidationResult.Success()
-                                : ValidationResult.Error("[red]Input kan ikke være tom[/]");
-                        }));
-
+                string input = UIHelper.GetUserInput(uiConfig.Prompts, uiConfig.Colors);
                 
                 if (input.Equals("Q", StringComparison.OrdinalIgnoreCase))
                 {
-                    AnsiConsole.MarkupLine("\n[grey]Avslutter programmet...[/]");
+                    AnsiConsole.MarkupLine($"\n[{uiConfig.Colors.Info}]{uiConfig.Prompts.ExitMessage}[/]");
                     return;
                 }
 
-
                 if (!string.IsNullOrEmpty(input) && converter.IsValidInput(input))
                 {
-                    AnsiConsole.WriteLine();
-                    AnsiConsole.MarkupLine("[bold underline]ASCII-verdier:[/]");
+                    // Vis ASCII-tabell
+                    UIHelper.DisplayAsciiTable(input, uiConfig);
 
-                    // Tabell for tegn og ASCII-verdi
-                    var table = new Table();
-                    table.AddColumn("Input");
-                    table.AddColumn("Beskrivelse");
-                    table.AddColumn("Output");
-
-                    foreach (char c in input)
-                    {
-                        string description = char.IsUpper(c) ? $"uppercase {c}" : $"lowercase {c}";
-                        table.AddRow(c.ToString(), description, ((int)c).ToString());
-                    }
-
-                    AnsiConsole.Write(table);
-
-                    // 1. Konverter til ASCII-streng
+                    // Konverter til ASCII-streng
                     string asciiDigits = converter.ConvertToAscii(input);
-                    AnsiConsole.WriteLine();
-                    AnsiConsole.MarkupLine($"[bold]Kombinert ASCII-verdi:[/] [cyan]{asciiDigits}[/]");
-
-                    // 2. Beregner sjekksiffer
+                    
+                    // Beregn sjekksiffer
                     int checkDigit = calculator.CalculateCheckDigit(asciiDigits);
-                    AnsiConsole.MarkupLine($"[bold]Sjekksiffer (Luhn):[/] [green]{checkDigit}[/]");
-
-                    // 3. Slår sammen og vis sluttresultat
-                    string finalOutput = asciiDigits + checkDigit;
-                    AnsiConsole.MarkupLine($"[bold]Ferdig streng med sjekksiffer:[/] [blue]{finalOutput}[/]\n");
+                    
+                    // Vis resultater
+                    UIHelper.DisplayResults(asciiDigits, checkDigit, uiConfig);
                 }
                 else
                 {
-                    AnsiConsole.MarkupLine("[red]Ugyldig input.[/] Vennligst bruk kun gyldige ASCII-tegn.\n");
+                    AnsiConsole.MarkupLine($"[{uiConfig.Colors.Error}]{uiConfig.Prompts.InvalidInputError}[/]\n");
                 }
             }
-
-            AnsiConsole.WriteLine();
-            AnsiConsole.MarkupLine("[grey]Trykk en tast for å avslutte...[/]");
-            Console.ReadKey();
         }
     }
 }

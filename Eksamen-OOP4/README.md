@@ -16,19 +16,30 @@ En elegant konsollapplikasjon som konverterer en tekststreng (f.eks. et navn) ti
 
 ### Teknikker og ferdigheter brukt
 
-I Question 1 demonstrerer jeg både grunnleggende C#-programmering og mer avanserte konsepter for brukeropplevelse. Kjernen i løsningen er implementasjonen av Luhn-algoritmen og ASCII-konvertering, med fokus på datatype-konvertering og algoritmisk tenkning. Løsningen bruker objektorientert design med separate klasser for ulike ansvarsområder:
+I Question 1 demonstrerer jeg både grunnleggende C#-programmering og mer avanserte konsepter innen applikasjonsarkitektur og brukeropplevelse. Koden er strukturert i en modulbasert arkitektur med tydelig separasjon av ansvar:
 
-* **AsciiConverter** håndterer konvertering fra tekst til ASCII-verdier
-* **LuhnCalculator** implementerer Luhn-algoritmen for å beregne sjekksiffer
+#### Arkitektur og Moduler
+* **Core Logic** - Separate klasser for applikasjonens kjernefunksjonalitet
+  * `AsciiConverter`: Håndterer konvertering fra tekst til ASCII-verdier
+  * `LuhnCalculator`: Implementerer Luhn-algoritmen for å beregne sjekksiffer
 
-En spesielt fremtredende del av løsningen er bruken av **Spectre.Console**-biblioteket for å skape et moderne, fargerikt og brukervennlig kommandolinjegrensesnitt. Dette inkluderer:
+* **Konfigurasjonssystem** - Ekstern konfigurasjon for innstillinger
+  * JSON-basert konfigurasjon via `appsettings.json`
+  * Sterkt typede konfigurasjonsklasser i `Configuration`-mappen
+  * Automatisk lasting og feilhåndtering av konfigurasjon
 
-* Formatert tekst med farger, fet og kursiv skrift
-* Tabeller for oversiktlig datavisning
-* Avanserte prompts med innebygd validering
-* Visuell rytme og struktur i brukergrensesnittet
+* **UI Abstraksjon** - Modulbasert UI-håndtering
+  * `UIHelper`-klasse som kapsler inn alle UI-operasjoner
+  * Konfigurerbare farger, tekster og meldinger via konfigurasjonsfilen
+  * Gjenbrukbare UI-komponenter for hovedfunksjonaliteten
 
-Programmet demonstrerer også god feilhåndtering for ugyldig input, og tilbyr en intuitiv brukerflyt med mulighet for å avslutte når som helst.
+Løsningen benytter Spectre.Console-biblioteket for å skape et moderne og brukervennlig kommandolinjegrensesnitt med:
+* Formatert tekst med konfigurerbare farger og stilarter
+* Interaktive tabeller for datavisualisering
+* Validerte brukerinput med håndtering av feilsituasjoner
+* Konsistent visuell rytme og struktur
+
+Denne løsningen viser ikke bare en implementasjon av Luhn-algoritmen, men også moderne applikasjonsarkitektur med konfigurerbarhet, UI-abstraksjon og modulbasert design.
 
 ## Oppsett og bruk
 
