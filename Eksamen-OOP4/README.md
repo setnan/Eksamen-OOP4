@@ -12,22 +12,43 @@ I Question 2 demonstrerer jeg flere sentrale konsepter fra objektorientert progr
 
 ## Question 1 - ASCII og Luhn Algoritme
 
-En konsollapplikasjon som konverterer en tekststreng (f.eks. et navn) til ASCII-verdier og deretter beregner en sjekksiffer basert på Luhn-algoritmen. Programmet viser konverteringen steg-for-steg og legger til slutt til sjekksifferet for å lage et endelig nummer.
+En elegant konsollapplikasjon som konverterer en tekststreng (f.eks. et navn) til ASCII-verdier og deretter beregner en sjekksiffer basert på Luhn-algoritmen. Programmet viser konverteringen i en oversiktlig, fargerik tabell og gir brukeren umiddelbar visuell tilbakemelding på hvert steg i prosessen.
 
 ### Teknikker og ferdigheter brukt
 
-I Question 1 demonstrerer jeg grunnleggende C#-programmering med fokus på konvertering mellom datatyper og algoritmisk tenkning. Løsningen bruker eksplisitt typede variabler og viser bruk av ulike kontrollstrukturer som if-setninger og for-løkker. Jeg bruker objektorientert programmering med separate klasser for å skille ansvarsområder (en for ASCII-konvertering og en for Luhn-algoritmen). Programmet inkluderer god feilhåndtering for ugyldig input og viser informativ output til brukeren med detaljert beskrivelse av hvert steg i prosessen.
+I Question 1 demonstrerer jeg både grunnleggende C#-programmering og mer avanserte konsepter for brukeropplevelse. Kjernen i løsningen er implementasjonen av Luhn-algoritmen og ASCII-konvertering, med fokus på datatype-konvertering og algoritmisk tenkning. Løsningen bruker objektorientert design med separate klasser for ulike ansvarsområder:
+
+* **AsciiConverter** håndterer konvertering fra tekst til ASCII-verdier
+* **LuhnCalculator** implementerer Luhn-algoritmen for å beregne sjekksiffer
+
+En spesielt fremtredende del av løsningen er bruken av **Spectre.Console**-biblioteket for å skape et moderne, fargerikt og brukervennlig kommandolinjegrensesnitt. Dette inkluderer:
+
+* Formatert tekst med farger, fet og kursiv skrift
+* Tabeller for oversiktlig datavisning
+* Avanserte prompts med innebygd validering
+* Visuell rytme og struktur i brukergrensesnittet
+
+Programmet demonstrerer også god feilhåndtering for ugyldig input, og tilbyr en intuitiv brukerflyt med mulighet for å avslutte når som helst.
 
 ## Oppsett og bruk
 
 1. Åpne løsningen i Visual Studio eller annet .NET-kompatibelt utviklingsmiljø
 2. Bygg løsningen med .NET 6.0 eller nyere
-3. Kjør Question-2 prosjektet med `dotnet run` fra Question-2 mappen eller direkte fra utviklingsmiljøet
-4. Bruk piltastene for å navigere i menyen og Enter for å velge
+3. For å kjøre Question-1:
+   - Naviger til Question-1 mappen
+   - Kjør `dotnet run` eller start direkte fra utviklingsmiljøet
+   - Skriv inn et ord/navn og se den visuelle konverteringen til ASCII med sjekksiffer
+   - Skriv 'Q' for å avslutte programmet
+4. For å kjøre Question-2:
+   - Naviger til Question-2 mappen
+   - Kjør `dotnet run` eller start direkte fra utviklingsmiljøet
+   - Bruk piltastene for å navigere i menyen og Enter for å velge
 
 ### Forutsetninger
 - .NET 6.0 SDK eller nyere
-- Internettilkobling for API-kommunikasjon
+- NuGet-pakker:
+  - Spectre.Console (for Question-1)
+- Internettilkobling (for Question-2 API-kommunikasjon)
 
 ## Prosjektstruktur
 
