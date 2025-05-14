@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Question_2.Services;
 using Question_2.Models;
@@ -9,7 +9,13 @@ namespace Question_2
     {
         static async Task Main(string[] args)
         {
+            // Setter både input og output encoding til UTF-8 for støtte av norske tegn (æøå)
+            Console.InputEncoding = System.Text.Encoding.UTF8;
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+            
+            // Setter konsolltittel
+            Console.Title = "Søker/Stilling Matchmaking System";
+            
             Console.WriteLine("Henter data fra API...");
 
             ExamTaskService service = new ExamTaskService();
