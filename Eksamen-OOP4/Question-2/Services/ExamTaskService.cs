@@ -13,7 +13,7 @@ public class ExamTaskService
 
     public ExamTaskService()
     {
-        var config = AppConfig.Load();
+        AppConfig config = AppConfig.Load();
         _apiUrl = config.Api.BaseUrl;
         
         _httpClient = new HttpClient();
@@ -28,7 +28,7 @@ public class ExamTaskService
             response.EnsureSuccessStatusCode();
 
             using var stream = await response.Content.ReadAsStreamAsync();
-            var data = await JsonSerializer.DeserializeAsync<ExamData>(stream, new JsonSerializerOptions
+            ExamData? data = await JsonSerializer.DeserializeAsync<ExamData>(stream, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
@@ -41,7 +41,7 @@ public class ExamTaskService
                 return null;
             }
 
-            // Valider at vi faktisk har mottatt data
+            // Validerer at vi har mottatt data
             if (data.Applicants == null || data.Positions == null || !data.Applicants.Any() || !data.Positions.Any())
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;

@@ -10,20 +10,20 @@ public class MatchService
 
         foreach (var applicant in applicants)
         {
-            var desired = applicant.DesireedPosition;
+            Position desired = applicant.DesireedPosition;
 
             // Finn kandidater med samme tittel (obligatorisk)
-            var titleMatches = positions
+            List<Position> titleMatches = positions
                 .Where(p => p.Title.Equals(desired.Title, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             // Deretter filtrer på seniority
-            var seniorityMatches = titleMatches
+            List<Position> seniorityMatches = titleMatches
                 .Where(p => p.Seniority.Equals(desired.Seniority, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             // Nå rangerer vi basert på skill overlap og evt. specialization
-            var bestMatch = seniorityMatches
+            Position? bestMatch = seniorityMatches
                 .OrderByDescending(p => ScoreMatch(p, desired))
                 .FirstOrDefault();
 

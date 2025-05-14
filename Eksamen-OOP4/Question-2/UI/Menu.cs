@@ -1,10 +1,14 @@
 using Question_2.Models;
 using Spectre.Console;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Question_2;
 
 public class Menu
 {
+    // Lagrer matchene for tilgang i alle menymetoder
     private readonly List<(Applicant Applicant, Position MatchedPosition)> _matches;
 
     public Menu(List<(Applicant, Position)> matches)
@@ -14,6 +18,7 @@ public class Menu
 
     public void Show()
     {
+        // Definerer hovedmenyalternativene
         List<string> options = new()
         {
             "Vis alle søkere",
@@ -25,23 +30,26 @@ public class Menu
         while (true)
         {
             AnsiConsole.Clear();
-            
-            // Tittelbanner
-            var rule = new Rule("[bold green]MATCH-APP[/]")
+
+            // Viser visuell tittel for å tydeliggjøre brukergrensesnittet
+            Rule rule = new Rule("[bold green]MATCH-APP[/]")
                 .Centered()
                 .RuleStyle(Style.Parse("green"));
-            
+
             AnsiConsole.Write(rule);
             AnsiConsole.WriteLine();
-            
-            var selected = AnsiConsole.Prompt(
+
+            // Gir brukeren mulighet til å velge menyalternativer med piltaster
+            string selected = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("Velg et alternativ:")
+                    .Title("[green]Velg et alternativ:[/]")
                     .PageSize(10)
                     .HighlightStyle(new Style(Color.Green))
-                    .WrapAround() // Gjør at man kan navigere fra topp til bunn og omvendt
+                    .WrapAround() // Tillater navigasjon fra topp til bunn og omvendt
                     .AddChoices(options));
 
+            // Utfører handling basert på brukerens valg
+            // Legger til hver søker som en rad i tabellen med navn, ønsket stilling, spesialisering og ferdigheter
             switch (options.IndexOf(selected))
             {
                 case 0:
@@ -66,23 +74,22 @@ public class Menu
 
     private void VisAlleSøkere()
     {
+        // Henter unike søkere fra matchingslisten 
         List<Applicant> alleSøkere = _matches
             .Select(m => m.Applicant)
             .Distinct()
             .ToList();
 
         AnsiConsole.Clear();
-        
-        var table = new Table();
+
+        // Oppretter tabell for strukturert visning av søkerinformasjon
+        Table table = new Table();
         table.Title = new TableTitle($"[bold]Viser {alleSøkere.Count} søkere[/]");
         table.Border(TableBorder.Rounded);
-        // Setter bredde eksplisitt i stedet for å ekspandere
-        table.Width = 80;
-        // Legger til horisontal linje mellom hver rad
-        // Bruker en bordtype som har skillelinjer
+        table.Width = 80; // Tabellbredden er fast definert til 80 tegn
         table.Border(TableBorder.DoubleEdge);
-        
-        // Legg til kolonner
+
+        // Definerer kolonner for tabellen
         table.AddColumn(new TableColumn("[green]Navn[/]").Centered());
         table.AddColumn(new TableColumn("[green]Ønsket stilling[/]").Centered());
         table.AddColumn(new TableColumn("[green]Spesialisering[/]").Centered());
@@ -92,6 +99,7 @@ public class Menu
         {
             Position desired = applicant.DesireedPosition;
 
+            // Legger til rad for hver søker i tabellen
             table.AddRow(
                 $"[bold]{applicant.FirstName} {applicant.LastName}[/]",
                 $"{desired.Title} ({desired.Seniority})",
@@ -105,17 +113,15 @@ public class Menu
     private void VisAlleMatchinger()
     {
         AnsiConsole.Clear();
-        
-        var table = new Table();
+
+        // Oppretter tabell for å vise alle matchinger mellom søkere og stillinger
+        Table table = new Table();
         table.Title = new TableTitle($"[bold]Totalt {_matches.Count} matcher[/]");
         table.Border(TableBorder.Rounded);
-        // Setter bredde eksplisitt i stedet for å ekspandere
-        table.Width = 80;
-        // Legger til horisontal linje mellom hver rad
-        // Bruker en bordtype som har skillelinjer
+        table.Width = 80; // Fast tabellbredde for konsistent visning
         table.Border(TableBorder.DoubleEdge);
-        
-        // Legg til kolonner
+
+        // Definerer kolonner for tabellen
         table.AddColumn(new TableColumn("[green]Søker[/]").Centered());
         table.AddColumn(new TableColumn("[green]Matchet med stilling[/]").Centered());
         table.AddColumn(new TableColumn("[green]Seniority[/]").Centered());
@@ -123,6 +129,7 @@ public class Menu
 
         foreach ((Applicant applicant, Position position) in _matches)
         {
+            // Legger til rad for hver match i tabellen
             table.AddRow(
                 $"[bold]{applicant.FirstName} {applicant.LastName}[/]",
                 position.Title,
@@ -137,6 +144,7 @@ public class Menu
     {
         while (true)
         {
+            // Henter alle unike stillingstitler for filtrering
             List<string> titler = _matches
                 .Select(m => m.MatchedPosition.Title)
                 .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -151,6 +159,7 @@ public class Menu
                 return;
             }
 
+            // Legger til mulighet for å gå tilbake til hovedmenyen
             titler.Add("Gå tilbake");
 
             AnsiConsole.Clear();
@@ -159,13 +168,14 @@ public class Menu
                 .RuleStyle(Style.Parse("green"));
             AnsiConsole.Write(rule);
             AnsiConsole.WriteLine();
-            
+
+            // Lar brukeren velge stillingstittel fra listen
             var valgtTittel = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("Velg stillingstittel:")
+                    .Title("[green]Velg stillingstittel:[/]")
                     .PageSize(10)
                     .HighlightStyle(new Style(Color.Green))
-                    .WrapAround() // Gjør at man kan navigere fra topp til bunn og omvendt
+                    .WrapAround()
                     .AddChoices(titler));
 
             if (valgtTittel == "Gå tilbake")
@@ -173,39 +183,36 @@ public class Menu
                 return;
             }
 
+            // Filtrerer match basert på valgt stillingstittel
             List<(Applicant Applicant, Position MatchedPosition)> relevanteMatchinger = _matches
                 .Where(m => m.MatchedPosition.Title.Equals(valgtTittel, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             AnsiConsole.Clear();
-            
+
+            // Viser overskrift for den valgte stillingstittelen
             var panel = new Panel($"[bold]Matchinger for stillingstittel \"{valgtTittel}\"[/]")
             {
                 Border = BoxBorder.Rounded,
                 Padding = new Padding(1, 0, 1, 0),
-                // Begrenser bredden for å unngå for stor avstand
-                Width = 80
+                Width = 80 // Fast panelbredde for konsistent visning
             };
             AnsiConsole.Write(panel);
 
             if (relevanteMatchinger.Count == 0)
             {
-                AnsiConsole.MarkupLine("[yellow]Ingen matchinger funnet for denne tittelen.[/]");
+                AnsiConsole.MarkupLine("[yellow]Ingen match funnet for denne tittelen.[/]");
             }
             else
             {
+                // Viser matchende søkere i tabellformat
                 var table = new Table();
                 table.Border(TableBorder.Simple);
-                // Setter bredde eksplisitt i stedet for å ekspandere
-                table.Width = 76; // Litt mindre enn panel-bredden
-                
-                // Definerer kolonner først
+                table.Width = 76; // Litt mindre enn panelbredden for bedre visuell tilpasning
+
                 table.AddColumn(new TableColumn("[green]Søker[/]").Centered());
                 table.AddColumn(new TableColumn("[green]Seniority[/]").Centered());
                 table.AddColumn(new TableColumn("[green]Spesialisering[/]").Centered());
-                
-                // Legger til en tom rad for å skape litt avstand
-                table.AddEmptyRow();
 
                 foreach ((Applicant applicant, Position position) in relevanteMatchinger)
                 {
@@ -214,17 +221,18 @@ public class Menu
                         position.Seniority,
                         position.Specialization);
                 }
-                
+
                 AnsiConsole.Write(table);
             }
 
+            // Gir brukeren valg om å fortsette eller gå tilbake
             var choices = new[] { "Velg ny stillingstittel", "Gå til hovedmeny" };
             var valg = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("Hva vil du gjøre nå?")
+                    .Title("[green]Hva vil du gjøre nå?[/]")
                     .PageSize(10)
                     .HighlightStyle(new Style(Color.Green))
-                    .WrapAround() // Gjør at man kan navigere fra topp til bunn og omvendt
+                    .WrapAround()
                     .AddChoices(choices));
 
             if (valg == "Gå til hovedmeny")
@@ -232,20 +240,5 @@ public class Menu
                 return;
             }
         }
-    }
-
-    // Denne metoden er ikke lenger nødvendig da vi bruker Spectre.Console.SelectionPrompt i stedet
-    // Beholdes for referanse, men brukes ikke
-    private int ShowInteractiveMenu(List<string> options, string title)
-    {
-        AnsiConsole.Clear();
-        var selected = AnsiConsole.Prompt(
-            new SelectionPrompt<string>()
-                .Title(title)
-                .PageSize(10)
-                .HighlightStyle(new Style(Color.Green))
-                .AddChoices(options));
-
-        return options.IndexOf(selected);
     }
 }
