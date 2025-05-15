@@ -51,7 +51,7 @@ public class AppConfig
             config = LoadFromJsonFile(filePath) ?? config;
         }
         
-        // Sjekk for miljøvariabler og la dem overstyre konfigurasjonsfilen
+        // Sjekker for miljøvariabler og la dem overstyre konfigurasjonsfilen
         config = LoadFromEnvironment(config);
         
         return config;
@@ -83,7 +83,7 @@ public class AppConfig
     /// <returns>Oppdatert konfigurasjon.</returns>
     private static AppConfig LoadFromEnvironment(AppConfig config)
     {
-        // Sjekk og last miljøvariabel for API URL
+        // Sjekker og laster miljøvariabel for API URL
         string? apiUrlEnv = Environment.GetEnvironmentVariable("EXAM_API_URL");
         if (!string.IsNullOrWhiteSpace(apiUrlEnv))
         {
@@ -91,7 +91,7 @@ public class AppConfig
             Console.WriteLine("Info: API URL lastet fra miljøvariabel.");
         }
         
-        // Sjekk og last miljøvariabel for API-nøkkel
+        // Sjekker og laster miljøvariabel for API-nøkkel
         string? apiKeyEnv = Environment.GetEnvironmentVariable("EXAM_API_KEY");
         if (!string.IsNullOrWhiteSpace(apiKeyEnv))
         {

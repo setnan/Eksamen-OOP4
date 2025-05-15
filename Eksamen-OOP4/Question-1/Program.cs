@@ -43,10 +43,10 @@ namespace Question_1
                 {
                     try
                     {
-                        // Vis ASCII-tabell
+                        // Viser ASCII-tabell
                         UIHelper.DisplayAsciiTable(input, uiConfig);
 
-                        // Konverter til ASCII-streng
+                        // Konverterer til ASCII-streng
                         string asciiDigits = converter.ConvertToAscii(input);
 
                         // Beregner sjekksiffer

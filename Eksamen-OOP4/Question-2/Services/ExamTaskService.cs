@@ -99,7 +99,15 @@ public class ExamTaskService
         catch (Exception ex)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Uventet feil under API-kall: {ex.Message}");
+            Console.WriteLine($"Generell feil ved API-kall: {ex.Message}");
+            
+            // Sjekk om feilen kan være relatert til miljøvariabler eller API-konfigurasjon
+            if (string.IsNullOrEmpty(_apiUrl) || !_apiUrl.Contains("exam") || !_httpClient.DefaultRequestHeaders.Contains("X-API-KEY"))
+            {
+                Console.WriteLine("Sjekk at API-nøkkel og URL er korrekt konfigurert i appsettings.json eller miljøvariabler.");
+                Console.WriteLine("Forventet miljøvariabler: EXAM_API_KEY og EXAM_API_URL");
+            }
+            
             Console.ResetColor();
             return null;
         }

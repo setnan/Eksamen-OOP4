@@ -54,7 +54,7 @@ Sjekk API-nøkkel, URL, modellstruktur og nettverkstilkobling.");
                 return;
             }
 
-            // Starter matchingprosessen med visuell statusindikator
+            // Starter match-prosessen med visuell statusindikator
             MatchService matcher = new MatchService();
             List<(Applicant Applicant, Position MatchedPosition)> matches = null!;
 

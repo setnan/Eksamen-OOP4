@@ -28,17 +28,17 @@ public class MatchService
         {
             Position desired = applicant.DesireedPosition;
 
-            // Finn kandidater med samme tittel (obligatorisk)
+            // Finner kandidater med samme tittel
             List<Position> titleMatches = positions
                 .Where(p => p.Title.Equals(desired.Title, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            // Deretter filtrer på seniority
+            // Filtrer på seniority
             List<Position> seniorityMatches = titleMatches
                 .Where(p => p.Seniority.Equals(desired.Seniority, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            // Nå rangerer vi basert på skill overlap og evt. specialization
+            // Basert på overlap av ferdigheter og evt. spesialisering
             Position? bestMatch = seniorityMatches
                 .OrderByDescending(p => ScoreMatch(p, desired))
                 .FirstOrDefault();

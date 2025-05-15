@@ -18,6 +18,7 @@ public class Applicant
     /// <summary>
     /// Får eller setter søkerens ønskede stillingsposisjon.
     /// Inneholder detaljer om stillingstittel, spesialisering, senioritetsnivå og ønskede ferdigheter.
+    /// Her ligger det inn en skrivefeil for å matche opp mot API-data.
     /// </summary>
     public required Position DesireedPosition { get; set; }
 }

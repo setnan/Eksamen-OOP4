@@ -45,14 +45,14 @@ public class Menu
     /// <summary>
     /// Initialiserer en ny instans av menyhåndtereren med en liste over matchede søkere og stillinger.
     /// </summary>
-    /// <param name="matches">Liste over tupler som inneholder søkere og deres matchede stillinger.</param>
+    /// <param name="matches">Liste over tuples som inneholder søkere med matchede stillinger.</param>
     public Menu(List<(Applicant, Position)> matches)
     {
         _matches = matches;
     }
 
     /// <summary>
-    /// Viser hovedmenyen og håndterer brukerens interaksjon med denne.
+    /// Viser hovedmenyen og håndterer brukerens interaksjon med den.
     /// Fungerer som en løkke som fortsetter å vise menyalternativer til brukeren velger å avslutte.
     /// </summary>
     public void Show()
@@ -157,14 +157,28 @@ public class Menu
         table.AddColumn(new TableColumn("[green]Seniority[/]").Centered());
         table.AddColumn(new TableColumn("[green]Spesialisering[/]").Centered());
 
-        foreach ((Applicant applicant, Position position) in _matches)
+        try
         {
-            // Legger til rad for hver match i tabellen
-            table.AddRow(
-                $"[bold]{applicant.FirstName} {applicant.LastName}[/]",
-                position.Title,
-                position.Seniority,
-                position.Specialization);
+            foreach ((Applicant applicant, Position position) in _matches)
+            {
+                // Validerer data før de vises
+                string firstName = string.IsNullOrEmpty(applicant.FirstName) ? "[grey](Ikke angitt)[/]" : applicant.FirstName;
+                string lastName = string.IsNullOrEmpty(applicant.LastName) ? "[grey](Ikke angitt)[/]" : applicant.LastName;
+                string title = string.IsNullOrEmpty(position.Title) ? "[grey](Ikke angitt)[/]" : position.Title;
+                string seniority = string.IsNullOrEmpty(position.Seniority) ? "[grey](Ikke angitt)[/]" : position.Seniority;
+                string specialization = string.IsNullOrEmpty(position.Specialization) ? "[grey](Ikke angitt)[/]" : position.Specialization;
+
+                // Legger til rad for hver match i tabellen
+                table.AddRow(
+                    $"[bold]{firstName} {lastName}[/]",
+                    title,
+                    seniority,
+                    specialization);
+            }
+        }
+        catch (Exception ex)
+        {
+            AnsiConsole.MarkupLine($"[red]Feil ved visning av matchinger: {ex.Message}[/]");
         }
 
         AnsiConsole.Write(table);
@@ -198,7 +212,7 @@ public class Menu
             new FigletText("JOB-MATCH")
                 .Color(Color.Green)
                 .Centered());
-                
+        
         AnsiConsole.Write(
             new Rule()
                 .Centered()
@@ -207,7 +221,7 @@ public class Menu
     }
     
     /// <summary>
-    /// Konfigurerer en tabell med standard formatering for konsistent visuell presentasjon.
+    /// Konfigurerer en tabell med standard formatering for enhetlig visuell presentasjon.
     /// </summary>
     /// <param name="tittel">Tittelen som skal vises over tabellen.</param>
     /// <returns>En forhåndskonfigurert tabell klar til å legge til kolonner og rader.</returns>
@@ -222,7 +236,7 @@ public class Menu
     }
     
     /// <summary>
-    /// Oppretter en standard konfigurasjon for valgmenyer med konsistent utseende.
+    /// Oppretter en standard konfigurasjon for valgmenyer og konsistent utseende.
     /// </summary>
     /// <param name="tittel">Spørsmålet eller tittelen som vises over valgalternativene.</param>
     /// <returns>En forhåndskonfigurert SelectionPrompt klar til å legge til valgalternativer.</returns>
@@ -254,7 +268,7 @@ public class Menu
     
     /// <summary>
     /// Lar brukeren velge en stillingstittel og viser søkere som er matchet med stillinger med den valgte tittelen.
-    /// Gir brukeren muligheten til å filtrere resultater og se detaljert informasjon om matchinger for en spesifikk stillingstittel.
+    /// Gir brukeren muligheten til å filtrere resultater og se detaljert informasjon om match for en spesifikk stillingstittel.
     /// </summary>
     private void SelectJobTitle()
     {
@@ -294,9 +308,18 @@ public class Menu
             }
 
             // Filtrerer match basert på valgt stillingstittel
-            List<(Applicant Applicant, Position MatchedPosition)> relevanteMatchinger = _matches
-                .Where(m => m.MatchedPosition.Title.Equals(selectedTitle, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            List<(Applicant Applicant, Position MatchedPosition)> relevanteMatchinger = new();
+            try 
+            {
+                relevanteMatchinger = _matches
+                    .Where(m => m.MatchedPosition.Title != null && 
+                               m.MatchedPosition.Title.Equals(selectedTitle, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupLine($"[red]Feil ved filtrering av matchinger: {ex.Message}[/]");
+            }
 
             AnsiConsole.Clear();
 
@@ -318,18 +341,31 @@ public class Menu
                 // Viser matchende søkere i tabellformat
                 var table = new Table();
                 table.Border(TableBorder.Simple);
-                table.Width = GetConsoleWidth() - 4; // Litt mindre enn panelbredden for bedre visuell tilpasning
+                table.Width = GetConsoleWidth() - 4; // Vises litt mindre enn panelbredden for bedre visuell tilpasning
 
                 table.AddColumn(new TableColumn("[green]Søker[/]").Centered());
                 table.AddColumn(new TableColumn("[green]Seniority[/]").Centered());
                 table.AddColumn(new TableColumn("[green]Spesialisering[/]").Centered());
 
-                foreach ((Applicant applicant, Position position) in relevanteMatchinger)
+                try 
                 {
-                    table.AddRow(
-                        $"[bold]{applicant.FirstName} {applicant.LastName}[/]",
-                        position.Seniority,
-                        position.Specialization);
+                    foreach ((Applicant applicant, Position position) in relevanteMatchinger)
+                    {
+                        // Validerer data før de vises
+                        string firstName = string.IsNullOrEmpty(applicant.FirstName) ? "[grey](Ikke angitt)[/]" : applicant.FirstName;
+                        string lastName = string.IsNullOrEmpty(applicant.LastName) ? "[grey](Ikke angitt)[/]" : applicant.LastName;
+                        string seniority = string.IsNullOrEmpty(position.Seniority) ? "[grey](Ikke angitt)[/]" : position.Seniority;
+                        string specialization = string.IsNullOrEmpty(position.Specialization) ? "[grey](Ikke angitt)[/]" : position.Specialization;
+                        
+                        table.AddRow(
+                            $"[bold]{firstName} {lastName}[/]",
+                            seniority,
+                            specialization);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    AnsiConsole.MarkupLine($"[red]Feil ved visning av matchinger: {ex.Message}[/]");
                 }
 
                 AnsiConsole.Write(table);
