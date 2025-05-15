@@ -57,13 +57,6 @@ cd Question-2
 dotnet run
 ```
 
-Optional: Set environment variables if needed
-
-```powershell
-$env:EXAM_API_KEY="..."
-$env:EXAM_API_URL="..."
-```
-
 ---
 
 ## 🔢 Question 1 – ASCII Conversion & Luhn Algorithm
@@ -72,9 +65,12 @@ A console application that transforms a string (e.g. a name) into ASCII codes an
 
 ### 🔧 Architecture
 
-* `AsciiConverter.cs` – maps characters to ASCII values
-* `LuhnCalculator.cs` – applies Luhn algorithm
-* `UIHelper.cs` – handles console visuals
+- `AsciiConverter.cs` – converts input to combined ASCII digit string
+- `LuhnCalculator.cs` – calculates Luhn check digit from ASCII string
+- `Program.cs` – controls program flow and connects components
+- `AppConfig.cs` – loads config and UI labels from appsettings.json
+- `appsettings.json` – defines UI prompts, labels, and colors
+
 
 ### 📋 Concepts Demonstrated
 
@@ -95,9 +91,15 @@ This application retrieves randomized data from an external API, deserializes JS
 
 ### 🔧 Architecture
 
-* `ExamTaskService.cs` – handles API retrieval
-* `MatchService.cs` – logic for determining best matches
-* `Menu.cs` – console menu UI
+- `ExamTaskService.cs` – fetches and deserializes API data
+- `MatchService.cs` – matches applicants to positions
+- `Program.cs` – controls flow and user interaction
+- `AppConfig.cs` – loads API settings from config or environment
+- `appsettings.json` – contains API key and base URL
+- `Models/Applicant.cs` – represents job applicant
+- `Models/Position.cs` – represents a job position
+- `Models/ExamData.cs` – container for API data (applicants and positions)
+
 
 ### 📋 Concepts Demonstrated
 
