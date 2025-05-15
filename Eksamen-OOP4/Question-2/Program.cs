@@ -25,7 +25,7 @@ namespace Question_2
             Console.Title = "JOB-MATCH - Søker/Stilling Matchmaking System";
             
             // Oppretter tjeneste for å hente data fra API
-            ExamTaskService service = new ExamTaskService();
+            ExamTaskService service = new();
             ExamData? data = null;
             
             // Viser spinner mens data hentes og behandles
@@ -55,7 +55,7 @@ Sjekk API-nøkkel, URL, modellstruktur og nettverkstilkobling.");
             }
 
             // Starter match-prosessen med visuell statusindikator
-            MatchService matcher = new MatchService();
+            MatchService matcher = new();
             List<(Applicant Applicant, Position MatchedPosition)> matches = null!;
 
             await AnsiConsole.Status()
@@ -73,7 +73,7 @@ Sjekk API-nøkkel, URL, modellstruktur og nettverkstilkobling.");
                 });
 
             // Viser hovedmenyen med interaktiv brukeropplevelse
-            Menu meny = new Menu(matches);
+            Menu meny = new(matches);
             meny.Show();
         }
     }

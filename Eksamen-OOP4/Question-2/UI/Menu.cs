@@ -61,8 +61,8 @@ public class Menu
         List<string> options = new()
         {
             "Vis alle søkere",
-            "Vis alle matchinger",
-            "Velg stillingstittel og se matchinger",
+            "Vis alle matcher",
+            "Velg stillingstittel og se matcher",
             "Avslutt"
         };
 
@@ -141,14 +141,14 @@ public class Menu
     }
 
     /// <summary>
-    /// Viser en tabell med alle matchinger mellom søkere og stillinger.
+    /// Viser en tabell med alle matcher mellom søkere og stillinger.
     /// Presenterer informasjonen i et strukturert tabellformat ved hjelp av Spectre.Console.
     /// </summary>
     private void ShowAllMatches()
     {
         AnsiConsole.Clear();
 
-        // Oppretter tabell for å vise alle matchinger mellom søkere og stillinger
+        // Oppretter tabell for å vise alle matcher mellom søkere og stillinger
         Table table = CreateStandardTable($"Totalt {_matches.Count} matcher");
 
         // Definerer kolonner for tabellen
@@ -178,7 +178,7 @@ public class Menu
         }
         catch (Exception ex)
         {
-            AnsiConsole.MarkupLine($"[red]Feil ved visning av matchinger: {ex.Message}[/]");
+            AnsiConsole.MarkupLine($"[red]Feil ved visning av matcher: {ex.Message}[/]");
         }
 
         AnsiConsole.Write(table);
@@ -227,7 +227,7 @@ public class Menu
     /// <returns>En forhåndskonfigurert tabell klar til å legge til kolonner og rader.</returns>
     private Table CreateStandardTable(string tittel)
     {
-        var table = new Table();
+        Table table = new Table();
         table.Title = new TableTitle($"[bold]{tittel}[/]");
         table.Border(TableBorder.Rounded);
         table.Width = GetConsoleWidth();
@@ -308,23 +308,23 @@ public class Menu
             }
 
             // Filtrerer match basert på valgt stillingstittel
-            List<(Applicant Applicant, Position MatchedPosition)> relevanteMatchinger = new();
+            List<(Applicant Applicant, Position MatchedPosition)> relevanteMatcher = new();
             try 
             {
-                relevanteMatchinger = _matches
+                relevanteMatcher = _matches
                     .Where(m => m.MatchedPosition.Title != null && 
                                m.MatchedPosition.Title.Equals(selectedTitle, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
             catch (Exception ex)
             {
-                AnsiConsole.MarkupLine($"[red]Feil ved filtrering av matchinger: {ex.Message}[/]");
+                AnsiConsole.MarkupLine($"[red]Feil ved filtrering av matcher: {ex.Message}[/]");
             }
 
             AnsiConsole.Clear();
 
             // Viser overskrift for den valgte stillingstittelen
-            var panel = new Panel($"[bold]Matchinger for stillingstittel \"{selectedTitle}\"[/]")
+            var panel = new Panel($"[bold]Matcher for stillingstittel \"{selectedTitle}\"[/]")
             {
                 Border = BoxBorder.Rounded,
                 Padding = new Padding(1, 0, 1, 0),
@@ -332,7 +332,7 @@ public class Menu
             };
             AnsiConsole.Write(panel);
 
-            if (relevanteMatchinger.Count == 0)
+            if (relevanteMatcher.Count == 0)
             {
                 AnsiConsole.MarkupLine("[yellow]Ingen match funnet for denne tittelen.[/]");
             }
@@ -349,7 +349,7 @@ public class Menu
 
                 try 
                 {
-                    foreach ((Applicant applicant, Position position) in relevanteMatchinger)
+                    foreach ((Applicant applicant, Position position) in relevanteMatcher)
                     {
                         // Validerer data før de vises
                         string firstName = string.IsNullOrEmpty(applicant.FirstName) ? "[grey](Ikke angitt)[/]" : applicant.FirstName;
@@ -365,7 +365,7 @@ public class Menu
                 }
                 catch (Exception ex)
                 {
-                    AnsiConsole.MarkupLine($"[red]Feil ved visning av matchinger: {ex.Message}[/]");
+                    AnsiConsole.MarkupLine($"[red]Feil ved visning av matcher: {ex.Message}[/]");
                 }
 
                 AnsiConsole.Write(table);

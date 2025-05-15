@@ -24,7 +24,7 @@ public class MatchService
     {
         List<(Applicant, Position)> matches = new();
 
-        foreach (var applicant in applicants)
+        foreach (Applicant applicant in applicants)
         {
             Position desired = applicant.DesireedPosition;
 
