@@ -100,6 +100,7 @@ This application retrieves randomized data from an external API, deserializes JS
 - `AppConfig.cs` – loads API settings from config or environment
 - `appsettings.json` – contains API key and base URL
 
+
 - `Models/Applicant.cs` – represents job applicant
 - `Models/Position.cs` – represents a job position
 - `Models/ExamData.cs` – container for API data (applicants and positions)
