@@ -15,18 +15,14 @@ public class AppConfig
     public ApiSettings Api { get; set; } = new ApiSettings();
 
     /// <summary>
-    /// Laster applikasjonsinnstillinger fra appsettings.json-filen.
-    /// </summary>
-    /// <returns>En instans av AppConfig med innstillinger fra konfigurasjonsfilen, eller standardinnstillinger hvis filen ikke finnes eller er ugyldig.</returns>
-    /// <remarks>
-    /// Metoden søker etter konfigurasjonsfilen først i applikasjonens katalog, deretter i arbeidskatalogen.
-    /// Ved feil under innlasting brukes standardverdier og en advarsel vises i konsollen.
-    /// </remarks>
-    /// <summary>
     /// Laster applikasjonsinnstillinger fra appsettings.json-filen og miljøvariabler.
     /// Miljøvariabler vil overstyre verdier fra konfigurasjonsfilen hvis de finnes.
     /// </summary>
     /// <returns>En instans av AppConfig med innstillinger fra konfigurasjonsfiler og/eller miljøvariabler.</returns>
+    /// <remarks>
+    /// Metoden søker etter konfigurasjonsfilen først i applikasjonens katalog, deretter i arbeidskatalogen.
+    /// Ved feil under innlasting brukes standardverdier og en advarsel vises i konsollen.
+    /// </remarks>
     public static AppConfig Load()
     {
         // Start med standardkonfigurasjon
@@ -107,9 +103,6 @@ public class AppConfig
     }
 }
 
-/// <summary>
-/// Inneholder spesifikke innstillinger for API-tilkobling.
-/// </summary>
 /// <summary>
 /// Inneholder spesifikke innstillinger for API-tilkobling.
 /// Kan konfigureres via appsettings.json eller miljøvariabler (EXAM_API_URL, EXAM_API_KEY).
