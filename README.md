@@ -30,6 +30,7 @@ cd Eksamen-OOP4
 ```
 
 2. **Install required NuGet packages**
+
 Spectre.Console is a powerful library used to create rich, interactive, and visually appealing terminal applications.
 
 ```bash
