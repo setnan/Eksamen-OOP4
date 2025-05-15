@@ -1,117 +1,143 @@
-# OOP Exam - ASCII - Luhn Algorithm & Job-Matching
+# 🧠 OOP Exam – ASCII Conversion & Job Matching
 
-This project consists of two console applications developed for the OOP4 exam. Below is a description of the solutions.
+Welcome to my submission for the OOP4 exam. This solution includes two console applications focusing on algorithmic thinking, data handling, and API interaction.
 
-## Question 1 - ASCII Conversion & Luhn Algorithm
+---
 
-A clean console application that converts a text string (e.g., a name) into ASCII values and then calculates a check digit using the Luhn algorithm. The program presents the conversion in a clear, colorful table and gives the user immediate visual feedback at each step. The user can press `Q` to exit the application.
+## 🗂️ Project Structure
 
-### Techniques and Skills Demonstrated
+* **Question-1/** – ASCII to number conversion and Luhn checksum calculator
+* **Question-2/** – API integration and job-matching logic
 
-In Question 1, I demonstrate both fundamental C# programming and more advanced application architecture and user experience concepts. The code is structured in a modular architecture with clear separation of concerns:
+---
 
-#### Architecture and Modules
-* **Core Logic**
-  * `AsciiConverter`: Handles conversion from text to ASCII values
-  * `LuhnCalculator`: Implements the Luhn algorithm for check digit calculation
-* **Configuration System**
-  * `appsettings.json` with strongly typed configuration classes
-  * Automatic loading and fallback if configuration is missing
-* **UI Abstraction**
-  * `UIHelper` class for all UI-related operations
-  * Spectre.Console is used for structured and colored terminal output
+## ⚙️ Project Requirements
 
-### Prerequisites
+* .NET 9.0 SDK
+* Internet access for API retrieval
 
-#### Required Software
-- **.NET 9.0 SDK** or later
-  - This project targets .NET 9.0, which is a newer version. Make sure you have the appropriate SDK installed.
-  - You can download it from: https://dotnet.microsoft.com/download
-  - Check your installed version with: `dotnet --version`
+---
 
-#### Required Packages
-- **Spectre.Console** - Used for enhanced terminal UI
-  ```bash
-  dotnet add package Spectre.Console
-  ```
-  Or install using the NuGet Package Manager in Visual Studio.
+## 🚀 Getting Started
 
-### Running Question-1
+### 🧪 Setup Steps
+
+1. **Clone the repository** *(or extract the .zip if provided)*
+
+```bash
+git clone <repo-url>
+cd Eksamen-OOP4
+```
+
+2. **Install required NuGet packages**
+
+```bash
+dotnet add package Spectre.Console
+```
+
+3. **Build the solutions**
+
+```bash
+dotnet build
+```
+
+4. **Run Question 1** – ASCII to Luhn
 
 ```bash
 cd Question-1
 dotnet run
 ```
 
-1. Enter a word or name
-2. View ASCII values and Luhn check digit
-3. Press `Q` to quit
-
-## Question 2 - API Interaction & Job Matching
-
-An application that retrieves applicants and job positions from an external API and matches them based on title, seniority, specialization, and skills.
-
-### Techniques and Skills Demonstrated
-
-- Asynchronous API calls using `HttpClient`
-- Deserialization with `System.Text.Json`
-- Matching logic using LINQ and scoring
-- Spectre.Console for menus, tables, and styling
-- Scalable architecture using `Models`, `Services`, `UI`, and `Configuration`
-
-### Running Question-2
+5. **Run Question 2** – API Matching System
 
 ```bash
 cd Question-2
 dotnet run
 ```
 
-1. Data is automatically retrieved from the API
-2. Navigate the menu using arrow keys
-3. Interactively explore applicants and matches
-
-### Using Environment Variables (Optional)
+Optional: Set environment variables if needed
 
 ```powershell
 $env:EXAM_API_KEY="..."
 $env:EXAM_API_URL="..."
-dotnet run
 ```
 
-If environment variables are not set, values from `appsettings.json` will be used.
+---
 
-## Platform
-Developed and tested on Windows. Recommended to be evaluated on the same platform.
+## 🔢 Question 1 – ASCII Conversion & Luhn Algorithm
 
-## Use of AI
-- Refactored method and class names
-- Project and README structure guidance
-- UI improvements with Spectre.Console
+A console application that transforms a string (e.g. a name) into ASCII codes and applies the **Luhn algorithm** to calculate and append a checksum digit. The application provides interactive visual feedback using **Spectre.Console**.
 
-All AI suggestions have been manually reviewed and selectively implemented.
+### 🔧 Architecture
 
-## Project Structure
+* `AsciiConverter.cs` – maps characters to ASCII values
+* `LuhnCalculator.cs` – applies Luhn algorithm
+* `UIHelper.cs` – handles console visuals
 
-```
-Eksamen-OOP4/
-├── Question-1/
-│   ├── AsciiConverter.cs
-│   ├── LuhnCalculator.cs
-│   ├── UI/UIHelper.cs
-│   ├── Configuration/AppConfig.cs
-│   └── Program.cs
-│
-├── Question-2/
-│   ├── Models/Applicant.cs, Position.cs, ExamData.cs
-│   ├── Services/ExamTaskService.cs, MatchService.cs
-│   ├── UI/Menu.cs
-│   ├── Configuration/AppConfig.cs
-│   └── Program.cs
-└── README.md
-```
+### 📋 Concepts Demonstrated
 
-## API Endpoint
+* Encoding (ASCII)
+* Flow control (loops, conditionals)
+* Algorithm implementation (Luhn)
+* Separation of concerns with a modular structure
+
+---
+
+## 🌐 Question 2 – API Interaction & Job Matching
+
+This application retrieves randomized data from an external API, deserializes JSON into C# objects, and matches applicants to positions based on:
+
+* Title
+* Seniority
+* Skills and Specialization
+
+### 🔧 Architecture
+
+* `ExamTaskService.cs` – handles API retrieval
+* `MatchService.cs` – logic for determining best matches
+* `Menu.cs` – console menu UI
+
+### 📋 Concepts Demonstrated
+
+* API interaction using `HttpClient`
+* JSON deserialization
+* LINQ filtering and scoring
+* Console-based user navigation with Spectre.Console
+
+---
+
+## 🧠 Reflections
+
+### Simon Etnan – Reflection
+
+> This has been a great project to work on. I enjoyed building both low-level logic and higher-level architectural flow. I think Spectre.Console was a great library to learn and helped me present data intuitively. If I had more time I would like to make this into an Avalonia application or Web application.
+
+---
+
+## 🖥️ Platform
+
+Developed and tested on **Windows 11**. Please evaluate in a Windows environment to match console UI rendering.
+
+---
+
+## 🤖 Use of AI
+
+* Conceptual help understanding the Luhn algorithm
+* Guidance on project structure and file organization
+* Inspiration and formatting tips for README presentation
+* Conceptual sparring to explore unfamiliar features and techniques.
+* AI-assisted reflections and conversations served as inspiration and guidance, with no direct code copied.
+
+> All AI suggestions were manually reviewed and selectively applied.
+
+---
+
+## 🔗 API Endpoint
+
 ```
 https://exam.05093218.nip.io/api/ExamTask
 ```
-The API key is included in the project and can also be set via environment variables.
+
+API key is included in the project and may also be provided via environment variables.
+
+---
