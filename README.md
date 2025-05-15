@@ -1,6 +1,9 @@
 # 🧠 OOP Exam – ASCII Conversion & Job Matching
 
-Welcome to my submission for the OOP4 exam. This solution includes two console applications focusing on algorithmic thinking, data handling, and API interaction.
+Welcome to my submission for the OOP 1st year backend exam. 
+This project includes two console applications written in C#(.NET), focused on algorithmic logic, data handling, and API integration.
+
+**Created by znan**
 
 ---
 
@@ -112,7 +115,7 @@ This application retrieves randomized data from an external API, deserializes JS
 
 ## 🧠 Reflections
 
-### Simon Etnan – Reflection
+### Simon – Reflection
 
 > This project has been really fun to work on. I liked the mix of building logic from scratch and organizing everything into a clean structure. Learning Spectre.Console was a cool bonus – it made the terminal experience way more dynamic. If I had more time, I’d make this into a full Avalonia or web app, just to see how far it could go.
 
