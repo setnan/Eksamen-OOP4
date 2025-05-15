@@ -114,7 +114,7 @@ This application retrieves randomized data from an external API, deserializes JS
 
 ### Simon Etnan – Reflection
 
-> This has been a great project to work on. I enjoyed building both low-level logic and higher-level architectural flow. I think Spectre.Console was a great library to learn and helped me present data intuitively. If I had more time I would like to make this into an Avalonia application or Web application.
+> This project has been really fun to work on. I liked the mix of building logic from scratch and organizing everything into a clean structure. Learning Spectre.Console was a cool bonus – it made the terminal experience way more dynamic. If I had more time, I’d make this into a full Avalonia or web app, just to see how far it could go.
 
 ---
 
@@ -130,9 +130,8 @@ Developed and tested on **Windows 11**. Please evaluate in a Windows environment
 * Guidance on project structure and file organization
 * Inspiration and formatting tips for README presentation
 * Conceptual sparring to explore unfamiliar features and techniques.
-* AI-assisted reflections and conversations served as inspiration and guidance, with no direct code copied.
 
-> All AI suggestions were manually reviewed and selectively applied.
+> AI-assisted reflections and conversations served as inspiration and guidance, with no direct code copied.
 
 ---
 
