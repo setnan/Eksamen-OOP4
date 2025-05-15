@@ -10,7 +10,7 @@ Dette er en konsollapplikasjon som henter data fra et eksternt API, deseralisere
 
 I Question 2 demonstrerer jeg flere sentrale konsepter fra objektorientert programmering. Løsningen bruker asynkrone API-kall med HttpClient for å hente data, samt System.Text.Json for deserialisering fra JSON til egendefinerte modellklasser. Matchalgoritmene benytter LINQ for effektiv filtrering og sortering etter flere kriterier (tittel, så seniority, deretter spesialisering og ferdigheter). For å opprette en brukervennlig interaksjonsmulighet anvendes konsoll-UI med tastaturnavigering, samt fargeformatering for å tydeliggjøre resultater. Løsningen er basert på separasjon av ansvar gjennom deling i Services, Models og UI-komponenter.
 
-## Question 1 - ASCII og Luhn Algoritme
+## Question 1 - ASCII-konvertering og Luhn-algoritmen
 
 En elegant konsollapplikasjon som konverterer en tekststreng (f.eks. et navn) til ASCII-verdier og deretter beregner en sjekksiffer basert på Luhn-algoritmen. Programmet viser konverteringen i en oversiktlig, fargerik tabell og gir brukeren umiddelbar visuell tilbakemelding på hvert steg i prosessen.
 
@@ -186,5 +186,5 @@ I dette prosjektet har jeg benyttet AI-assistanse på følgende måter:
 - **Kodegjennomgang**: AI-assistenten hjalp med å identifisere potensielle problemer som nullreferanser og forbedringsmuligheter
 - **Implementasjon av konfigurasjonssystem**: Fikk assistanse for å implementere konfigurasjonssystem i begge delprosjekter
 - **Dokumentasjonsforbedringer**: README-filen ble utarbeidet med hjelp fra AI
-
-All kode har blitt gjennomgått manuelt, og jeg har sikret at implementasjonene er i tråd med oppgavekravene
+- 
+Alle AI-genererte forslag er manuelt vurdert, og kun struktur og teknikk er brukt der det styrker kvaliteten i henhold til eksamenskravene.

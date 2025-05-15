@@ -6,8 +6,15 @@ using Spectre.Console;
 
 namespace Question_2
 {
+    /// <summary>
+    /// Startpunkt for applikasjonen som henter data fra et API og matcher søkere med stillinger.
+    /// </summary>
     class Program
     {
+        /// <summary>
+        /// Hovedmetoden som konfigurerer konsollvisningen, henter og validerer data, kjører matching og viser menyen.
+        /// </summary>
+        /// <param name="args">Kommandolinjeargumenter (ikke brukt).</param>
         static async Task Main(string[] args)
         {
             // Setter både input og output encoding til UTF-8 for støtte av norske tegn (æøå)
@@ -17,26 +24,27 @@ namespace Question_2
             // Setter konsolltittel
             Console.Title = "Søker/Stilling Matchmaking System";
             
-            // Opprett en loading-indikator med pen spinner
+            // Oppretter tjeneste for å hente data fra API
             ExamTaskService service = new ExamTaskService();
             ExamData? data = null;
             
+            // Viser spinner mens data hentes og behandles
             await AnsiConsole.Status()
                 .Spinner(Spinner.Known.Dots)
                 .SpinnerStyle(Style.Parse("green"))
                 .StartAsync("Henter data fra API...", async ctx => 
                 {
-                    // Oppdater status-tekst mens vi henter data
                     ctx.Status("Kobler til API...");
-                    await Task.Delay(500); // Liten forsinkelse for visuell effekt
-                    
+                    await Task.Delay(500);
+
                     ctx.Status("Laster ned data...");
                     data = await service.GetExamDataAsync();
-                    
+
                     ctx.Status("Behandler resultater...");
-                    await Task.Delay(300); // Liten forsinkelse for visuell effekt
+                    await Task.Delay(300);
                 });
 
+            // Håndterer tilfelle hvor API ikke returnerer gyldige data
             if (data == null)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -46,28 +54,25 @@ Sjekk API-nøkkel, URL, modellstruktur og nettverkstilkobling.");
                 return;
             }
 
-            // Visuell feedback under matching-prosessen
+            // Starter matchingprosessen med visuell statusindikator
             MatchService matcher = new MatchService();
             List<(Applicant Applicant, Position MatchedPosition)> matches = null!;
-            
-            // Viser en spinner mens matching-algoritmen kjører
+
             await AnsiConsole.Status()
                 .Spinner(Spinner.Known.Star)
                 .SpinnerStyle(Style.Parse("yellow"))
                 .StartAsync("Matcher søkere med stillinger...", async ctx => 
                 {
-                    // Viser antall søkere og stillinger
                     ctx.Status($"Analyserer {data.Applicants.Count} søkere og {data.Positions.Count} stillinger...");
-                    await Task.Delay(300); // Kort forsinkelse for visuell effekt
-                    
-                    // Kjører matching-algoritmen
+                    await Task.Delay(300);
+
                     matches = matcher.MatchApplicantsToPositions(data.Applicants, data.Positions);
-                    
-                    // Viser hvor mange matcher vi fant
+
                     ctx.Status($"Fant {matches.Count} matcher!");
-                    await Task.Delay(500); // Kort forsinkelse for visuell effekt
+                    await Task.Delay(500);
                 });
 
+            // Viser hovedmenyen med interaktiv brukeropplevelse
             Menu meny = new Menu(matches);
             meny.Show();
         }

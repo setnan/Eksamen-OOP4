@@ -6,16 +6,31 @@ using System.Linq;
 
 namespace Question_2;
 
+/// <summary>
+/// Hovedklasse for brukergrensesnittet som håndterer visning av menyer og interaksjon med brukeren.
+/// Benytter Spectre.Console for forbedret visuell presentasjon i terminalen.
+/// </summary>
 public class Menu
 {
-    // Lagrer matchene for tilgang i alle menymetoder
+    /// <summary>
+    /// Liste over matchede søkere og stillingsposisjoner som brukes i alle menymetoder.
+    /// Inneholder tupler av søkere og stillinger som har blitt matchet av algoritmen.
+    /// </summary>
     private readonly List<(Applicant Applicant, Position MatchedPosition)> _matches;
 
+    /// <summary>
+    /// Initialiserer en ny instans av menyhåndtereren med en liste over matchede søkere og stillinger.
+    /// </summary>
+    /// <param name="matches">Liste over tupler som inneholder søkere og deres matchede stillinger.</param>
     public Menu(List<(Applicant, Position)> matches)
     {
         _matches = matches;
     }
 
+    /// <summary>
+    /// Viser hovedmenyen og håndterer brukerens interaksjon med denne.
+    /// Fungerer som en løkke som fortsetter å vise menyalternativer til brukeren velger å avslutte.
+    /// </summary>
     public void Show()
     {
         // Definerer hovedmenyalternativene
@@ -72,6 +87,10 @@ public class Menu
         }
     }
 
+    /// <summary>
+    /// Viser en tabell med alle søkere i systemet og deres ønskede stillingsdetaljer.
+    /// Presenterer informasjonen i et strukturert tabellformat ved hjelp av Spectre.Console.
+    /// </summary>
     private void VisAlleSøkere()
     {
         // Henter unike søkere fra matchingslisten 
@@ -110,6 +129,10 @@ public class Menu
         AnsiConsole.Write(table);
     }
 
+    /// <summary>
+    /// Viser en tabell med alle matchinger mellom søkere og stillinger.
+    /// Presenterer informasjonen i et strukturert tabellformat ved hjelp av Spectre.Console.
+    /// </summary>
     private void VisAlleMatchinger()
     {
         AnsiConsole.Clear();
@@ -140,6 +163,10 @@ public class Menu
         AnsiConsole.Write(table);
     }
 
+    /// <summary>
+    /// Lar brukeren velge en stillingstittel og viser søkere som er matchet med stillinger med den valgte tittelen.
+    /// Gir brukeren muligheten til å filtrere resultater og se detaljert informasjon om matchinger for en spesifikk stillingstittel.
+    /// </summary>
     private void VelgStillingstittel()
     {
         while (true)

@@ -6,11 +6,26 @@ using Question_2.Models;
 
 namespace Question_2.Services;
 
+/// <summary>
+/// Tjenesteklasse ansvarlig for kommunikasjon med API-et for henting av eksamensdata.
+/// Håndterer HTTP-forespørsler, autentisering med API-nøkkel og deserialisering av JSON-respons.
+/// </summary>
 public class ExamTaskService
 {
+    /// <summary>
+    /// HttpClient-instans for å utføre HTTP-forespørsler mot API-et.
+    /// </summary>
     private readonly HttpClient _httpClient;
+    
+    /// <summary>
+    /// URL til API-endepunktet som skal kontaktes.
+    /// </summary>
     private readonly string _apiUrl;
 
+    /// <summary>
+    /// Initialiserer en ny instans av ExamTaskService.
+    /// Laster innstillinger fra konfigurasjonsfilen og konfigurerer HttpClient med nødvendig API-nøkkel.
+    /// </summary>
     public ExamTaskService()
     {
         AppConfig config = AppConfig.Load();
@@ -20,6 +35,14 @@ public class ExamTaskService
         _httpClient.DefaultRequestHeaders.Add("X-API-KEY", config.Api.ApiKey);
     }
 
+    /// <summary>
+    /// Henter eksamensdata asynkront fra API-et.
+    /// </summary>
+    /// <returns>Et ExamData-objekt med søkere og stillinger hvis vellykket, eller null hvis forespørselen mislykkes.</returns>
+    /// <remarks>
+    /// Metoden håndterer forskjellige feilscenarier som nettverksfeil, deserialiseringsfeil og tidsavbrudd,
+    /// og gir passende feilmeldinger til konsollen.
+    /// </remarks>
     public async Task<ExamData?> GetExamDataAsync()
     {
         try
