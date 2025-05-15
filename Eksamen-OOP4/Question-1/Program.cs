@@ -6,26 +6,34 @@ using Spectre.Console;
 
 namespace Question_1
 {
+    /// <summary>
+    /// Startpunkt for ASCII- og Luhn-algoritme-kalkulatoren.
+    /// Håndterer brukerinput, konvertering og beregning av sjekksiffer.
+    /// </summary>
     class Program
     {
+        /// <summary>
+        /// Hovedmetode som initierer programmet, laster konfigurasjon og kjører hovedloop for brukerinteraksjon.
+        /// </summary>
+        /// <param name="args">Kommando-linje argumenter (ikke brukt).</param>
         static void Main(string[] args)
         {
-            // Last konfigurasjon
-            var config = AppConfig.Load();
-            var uiConfig = config.UI;
-            
+            // Laster konfigurasjon
+            AppConfig config = AppConfig.Load();
+            UISettings uiConfig = config.UI;
+
             // Vis header
             UIHelper.DisplayHeader(config.AppSettings);
 
-            // Initialiser konverterere
-            var converter = new AsciiConverter();
-            var calculator = new LuhnCalculator();
+            // Initialiserer konverterere
+            AsciiConverter converter = new();
+            LuhnCalculator calculator = new();
 
             // Hovedloop
             while (true)
             {
                 string input = UIHelper.GetUserInput(uiConfig.Prompts, uiConfig.Colors);
-                
+
                 if (input.Equals("Q", StringComparison.OrdinalIgnoreCase))
                 {
                     AnsiConsole.MarkupLine($"\n[{uiConfig.Colors.Info}]{uiConfig.Prompts.ExitMessage}[/]");
@@ -34,17 +42,24 @@ namespace Question_1
 
                 if (!string.IsNullOrEmpty(input) && converter.IsValidInput(input))
                 {
-                    // Vis ASCII-tabell
-                    UIHelper.DisplayAsciiTable(input, uiConfig);
+                    try
+                    {
+                        // Vis ASCII-tabell
+                        UIHelper.DisplayAsciiTable(input, uiConfig);
 
-                    // Konverter til ASCII-streng
-                    string asciiDigits = converter.ConvertToAscii(input);
-                    
-                    // Beregn sjekksiffer
-                    int checkDigit = calculator.CalculateCheckDigit(asciiDigits);
-                    
-                    // Vis resultater
-                    UIHelper.DisplayResults(asciiDigits, checkDigit, uiConfig);
+                        // Konverter til ASCII-streng
+                        string asciiDigits = converter.ConvertToAscii(input);
+
+                        // Beregn sjekksiffer
+                        int checkDigit = calculator.CalculateCheckDigit(asciiDigits);
+
+                        // Vis resultater
+                        UIHelper.DisplayResults(asciiDigits, checkDigit, uiConfig);
+                    }
+                    catch (Exception ex)
+                    {
+                        AnsiConsole.MarkupLine($"[{uiConfig.Colors.Error}]En feil oppstod: {ex.Message}[/]");
+                    }
                 }
                 else
                 {
