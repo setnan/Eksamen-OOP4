@@ -22,7 +22,7 @@ namespace Question_2
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             
             // Setter konsolltittel
-            Console.Title = "Søker/Stilling Matchmaking System";
+            Console.Title = "JOB-MATCH - Søker/Stilling Matchmaking System";
             
             // Oppretter tjeneste for å hente data fra API
             ExamTaskService service = new ExamTaskService();

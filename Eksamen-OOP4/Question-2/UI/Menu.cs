@@ -195,7 +195,7 @@ public class Menu
     private void ShowMainTitle()
     {
         AnsiConsole.Write(
-            new FigletText("MATCH-APP")
+            new FigletText("JOB-MATCH")
                 .Color(Color.Green)
                 .Centered());
                 
