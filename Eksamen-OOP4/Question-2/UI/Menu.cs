@@ -17,6 +17,30 @@ public class Menu
     /// Inneholder tupler av søkere og stillinger som har blitt matchet av algoritmen.
     /// </summary>
     private readonly List<(Applicant Applicant, Position MatchedPosition)> _matches;
+    
+    /// <summary>
+    /// Henter bredden på konsolvinduet eller returnerer en sikker standardverdi.
+    /// </summary>
+    /// <returns>Konsollbredde minus en sikkerhetmargin, eller standardverdi ved feil.</returns>
+    private int GetConsoleWidth()
+    {
+        try
+        {
+            // Bruker faktisk konsollbredde, men reduserer med en margin på 5 tegn for sikkerhet
+            int width = Console.WindowWidth - 5;
+            
+            // Sikrer at vi ikke går under minimumbredde eller over maksbredde
+            if (width < 60) return 60; // Minimum bredde
+            if (width > 150) return 150; // Maksimum bredde for lesbarhet
+            
+            return width;
+        }
+        catch
+        {
+            // Fallback hvis vi ikke kan lese konsollbredden
+            return 80;
+        }
+    }
 
     /// <summary>
     /// Initialiserer en ny instans av menyhåndtereren med en liste over matchede søkere og stillinger.
@@ -48,7 +72,7 @@ public class Menu
 
             // Viser visuell tittel for å tydeliggjøre brukergrensesnittet
             Rule rule = new Rule("[bold green]MATCH-APP[/]")
-                .Centered()
+                .LeftJustified() // Venstrejustert tittel i stedet for sentrert
                 .RuleStyle(Style.Parse("green"));
 
             AnsiConsole.Write(rule);
@@ -105,7 +129,7 @@ public class Menu
         Table table = new Table();
         table.Title = new TableTitle($"[bold]Viser {alleSøkere.Count} søkere[/]");
         table.Border(TableBorder.Rounded);
-        table.Width = 80; // Tabellbredden er fast definert til 80 tegn
+        table.Width = GetConsoleWidth(); // Dynamisk tilpasset tabellbredde
         table.Border(TableBorder.DoubleEdge);
 
         // Definerer kolonner for tabellen
@@ -123,7 +147,7 @@ public class Menu
                 $"[bold]{applicant.FirstName} {applicant.LastName}[/]",
                 $"{desired.Title} ({desired.Seniority})",
                 desired.Specialization,
-                string.Join(", ", desired.Skills));
+                FormatSkills(desired.Skills, 3)); // Viser maks 3 ferdigheter for å holde linjen kort
         }
 
         AnsiConsole.Write(table);
@@ -133,6 +157,26 @@ public class Menu
     /// Viser en tabell med alle matchinger mellom søkere og stillinger.
     /// Presenterer informasjonen i et strukturert tabellformat ved hjelp av Spectre.Console.
     /// </summary>
+    
+    /// <summary>
+    /// Formaterer en liste med ferdigheter til en kort, lesbar streng.
+    /// </summary>
+    /// <param name="skills">Listen med ferdigheter.</param>
+    /// <param name="maxCount">Maksimalt antall ferdigheter som skal vises.</param>
+    /// <returns>En formatert streng med ferdigheter, begrenset til angitt antall.</returns>
+    private string FormatSkills(List<string> skills, int maxCount)
+    {
+        if (skills == null || skills.Count == 0)
+            return "(Ingen)"; // Hvis ingen ferdigheter er angitt
+            
+        if (skills.Count <= maxCount)
+            return string.Join(", ", skills); // Vis alle hvis det er færre enn maksimum
+            
+        // Hvis det er flere enn maksimum, vis kun de første og legg til ellipsis
+        var visibleSkills = skills.Take(maxCount).ToList();
+        return string.Join(", ", visibleSkills) + $" +{skills.Count - maxCount} flere";
+    }
+    
     private void VisAlleMatchinger()
     {
         AnsiConsole.Clear();
@@ -141,7 +185,7 @@ public class Menu
         Table table = new Table();
         table.Title = new TableTitle($"[bold]Totalt {_matches.Count} matcher[/]");
         table.Border(TableBorder.Rounded);
-        table.Width = 80; // Fast tabellbredde for konsistent visning
+        table.Width = GetConsoleWidth(); // Dynamisk tilpasset tabellbredde
         table.Border(TableBorder.DoubleEdge);
 
         // Definerer kolonner for tabellen
@@ -191,7 +235,7 @@ public class Menu
 
             AnsiConsole.Clear();
             var rule = new Rule("[bold green]Velg en stillingstittel[/]")
-                .Centered()
+                .LeftJustified() // Venstrejustert tittel for konsistent design
                 .RuleStyle(Style.Parse("green"));
             AnsiConsole.Write(rule);
             AnsiConsole.WriteLine();
@@ -222,7 +266,7 @@ public class Menu
             {
                 Border = BoxBorder.Rounded,
                 Padding = new Padding(1, 0, 1, 0),
-                Width = 80 // Fast panelbredde for konsistent visning
+                Width = GetConsoleWidth() // Dynamisk tilpasset panelbredde
             };
             AnsiConsole.Write(panel);
 
@@ -235,7 +279,7 @@ public class Menu
                 // Viser matchende søkere i tabellformat
                 var table = new Table();
                 table.Border(TableBorder.Simple);
-                table.Width = 76; // Litt mindre enn panelbredden for bedre visuell tilpasning
+                table.Width = GetConsoleWidth() - 4; // Litt mindre enn panelbredden for bedre visuell tilpasning
 
                 table.AddColumn(new TableColumn("[green]Søker[/]").Centered());
                 table.AddColumn(new TableColumn("[green]Seniority[/]").Centered());
