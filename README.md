@@ -68,11 +68,26 @@ A console application that transforms a string (e.g. a name) into ASCII codes an
 
 ### 🔧 Architecture
 
-- `AsciiConverter.cs` – converts input to combined ASCII digit string
-- `LuhnCalculator.cs` – calculates Luhn check digit from ASCII string
-- `Program.cs` – controls program flow and connects components
-- `AppConfig.cs` – loads config and UI labels from appsettings.json
-- `appsettings.json` – defines UI prompts, labels, and colors
+            +----------------+
+            |  Program.cs    | ← Entry point
+            +--------+-------+
+                     |
+          +----------v----------+
+          |  AsciiConverter.cs  | ← Converts input to ASCII string
+          +----------+----------+
+                     |
+          +----------v----------+
+          |  LuhnCalculator.cs  | ← Calculates Luhn check digit
+          +----------+----------+
+                     |
+          +----------v----------+
+          |    AppConfig.cs     | ← Loads UI labels & config
+          +----------+----------+
+                     |
+          +----------v----------+
+          |  appsettings.json   | ← Contains labels and colors
+          +---------------------+
+
 
 
 ### 📋 Concepts Demonstrated
@@ -94,14 +109,31 @@ This application retrieves randomized data from an external API, deserializes JS
 
 ### 🔧 Architecture
 
-- `ExamTaskService.cs` – fetches and deserializes API data
-- `MatchService.cs` – matches applicants to positions
-- `Program.cs` – controls flow and user interaction
-- `AppConfig.cs` – loads API settings from config or environment
-- `appsettings.json` – contains API key and base URL
-- `Models/Applicant.cs` – represents job applicant
-- `Models/Position.cs` – represents a job position
-- `Models/ExamData.cs` – container for API data (applicants and positions)
+            +----------------+
+            |  Program.cs    | ← Entry point
+            +--------+-------+
+                     |
+        +------------+------------+
+        |                         |
++-------v--------+      +---------v-------+
+| ExamTaskService|      |   MatchService  |
+|  (API handler) |      | Matching logic  |
++-------+--------+      +---------+-------+
+        |                         |
++-------v--------+      +---------v-------+
+|   AppConfig.cs | ← Loads API key & URL |
++-------+--------+
+        |
++-------v--------+
+| appsettings.json |
++------------------+
+        |
++--------------------------+
+|  Models: Applicant.cs    |
+|  Models: Position.cs     |
+|  Models: ExamData.cs     |
++--------------------------+
+
 
 
 ### 📋 Concepts Demonstrated
