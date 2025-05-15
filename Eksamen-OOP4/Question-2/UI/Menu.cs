@@ -69,22 +69,13 @@ public class Menu
         while (true)
         {
             AnsiConsole.Clear();
-
-            // Viser visuell tittel for å tydeliggjøre brukergrensesnittet
-            Rule rule = new Rule("[bold green]MATCH-APP[/]")
-                .LeftJustified() // Venstrejustert tittel i stedet for sentrert
-                .RuleStyle(Style.Parse("green"));
-
-            AnsiConsole.Write(rule);
-            AnsiConsole.WriteLine();
+            
+            // Viser applikasjonens hovedtittel
+            ShowMainTitle();
 
             // Gir brukeren mulighet til å velge menyalternativer med piltaster
             string selected = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("[green]Velg et alternativ:[/]")
-                    .PageSize(10)
-                    .HighlightStyle(new Style(Color.Green))
-                    .WrapAround() // Tillater navigasjon fra topp til bunn og omvendt
+                CreateStandardMenu("Velg et alternativ:")
                     .AddChoices(options));
 
             // Utfører handling basert på brukerens valg
@@ -92,17 +83,17 @@ public class Menu
             switch (options.IndexOf(selected))
             {
                 case 0:
-                    VisAlleSøkere();
+                    ShowAllApplicants();
                     AnsiConsole.WriteLine("\nTrykk en tast for å gå tilbake til menyen...");
                     Console.ReadKey();
                     break;
                 case 1:
-                    VisAlleMatchinger();
+                    ShowAllMatches();
                     AnsiConsole.WriteLine("\nTrykk en tast for å gå tilbake til menyen...");
                     Console.ReadKey();
                     break;
                 case 2:
-                    VelgStillingstittel();
+                    SelectJobTitle();
                     break;
                 case 3:
                     AnsiConsole.MarkupLine("[yellow]Avslutter...[/]");
@@ -115,10 +106,10 @@ public class Menu
     /// Viser en tabell med alle søkere i systemet og deres ønskede stillingsdetaljer.
     /// Presenterer informasjonen i et strukturert tabellformat ved hjelp av Spectre.Console.
     /// </summary>
-    private void VisAlleSøkere()
+    private void ShowAllApplicants()
     {
         // Henter unike søkere fra matchingslisten 
-        List<Applicant> alleSøkere = _matches
+        List<Applicant> allApplicants = _matches
             .Select(m => m.Applicant)
             .Distinct()
             .ToList();
@@ -126,11 +117,7 @@ public class Menu
         AnsiConsole.Clear();
 
         // Oppretter tabell for strukturert visning av søkerinformasjon
-        Table table = new Table();
-        table.Title = new TableTitle($"[bold]Viser {alleSøkere.Count} søkere[/]");
-        table.Border(TableBorder.Rounded);
-        table.Width = GetConsoleWidth(); // Dynamisk tilpasset tabellbredde
-        table.Border(TableBorder.DoubleEdge);
+        Table table = CreateStandardTable($"Viser {allApplicants.Count} søkere");
 
         // Definerer kolonner for tabellen
         table.AddColumn(new TableColumn("[green]Navn[/]").Centered());
@@ -138,7 +125,7 @@ public class Menu
         table.AddColumn(new TableColumn("[green]Spesialisering[/]").Centered());
         table.AddColumn(new TableColumn("[green]Ferdigheter[/]").Centered());
 
-        foreach (Applicant applicant in alleSøkere)
+        foreach (Applicant applicant in allApplicants)
         {
             Position desired = applicant.DesireedPosition;
 
@@ -157,6 +144,31 @@ public class Menu
     /// Viser en tabell med alle matchinger mellom søkere og stillinger.
     /// Presenterer informasjonen i et strukturert tabellformat ved hjelp av Spectre.Console.
     /// </summary>
+    private void ShowAllMatches()
+    {
+        AnsiConsole.Clear();
+
+        // Oppretter tabell for å vise alle matchinger mellom søkere og stillinger
+        Table table = CreateStandardTable($"Totalt {_matches.Count} matcher");
+
+        // Definerer kolonner for tabellen
+        table.AddColumn(new TableColumn("[green]Søker[/]").Centered());
+        table.AddColumn(new TableColumn("[green]Matchet med stilling[/]").Centered());
+        table.AddColumn(new TableColumn("[green]Seniority[/]").Centered());
+        table.AddColumn(new TableColumn("[green]Spesialisering[/]").Centered());
+
+        foreach ((Applicant applicant, Position position) in _matches)
+        {
+            // Legger til rad for hver match i tabellen
+            table.AddRow(
+                $"[bold]{applicant.FirstName} {applicant.LastName}[/]",
+                position.Title,
+                position.Seniority,
+                position.Specialization);
+        }
+
+        AnsiConsole.Write(table);
+    }
     
     /// <summary>
     /// Formaterer en liste med ferdigheter til en kort, lesbar streng.
@@ -177,52 +189,85 @@ public class Menu
         return string.Join(", ", visibleSkills) + $" +{skills.Count - maxCount} flere";
     }
     
-    private void VisAlleMatchinger()
+    /// <summary>
+    /// Viser applikasjonens hovedtittel med FigletText for visuell effekt.
+    /// </summary>
+    private void ShowMainTitle()
     {
-        AnsiConsole.Clear();
-
-        // Oppretter tabell for å vise alle matchinger mellom søkere og stillinger
-        Table table = new Table();
-        table.Title = new TableTitle($"[bold]Totalt {_matches.Count} matcher[/]");
-        table.Border(TableBorder.Rounded);
-        table.Width = GetConsoleWidth(); // Dynamisk tilpasset tabellbredde
-        table.Border(TableBorder.DoubleEdge);
-
-        // Definerer kolonner for tabellen
-        table.AddColumn(new TableColumn("[green]Søker[/]").Centered());
-        table.AddColumn(new TableColumn("[green]Matchet med stilling[/]").Centered());
-        table.AddColumn(new TableColumn("[green]Seniority[/]").Centered());
-        table.AddColumn(new TableColumn("[green]Spesialisering[/]").Centered());
-
-        foreach ((Applicant applicant, Position position) in _matches)
-        {
-            // Legger til rad for hver match i tabellen
-            table.AddRow(
-                $"[bold]{applicant.FirstName} {applicant.LastName}[/]",
-                position.Title,
-                position.Seniority,
-                position.Specialization);
-        }
-
-        AnsiConsole.Write(table);
+        AnsiConsole.Write(
+            new FigletText("MATCH-APP")
+                .Color(Color.Green)
+                .Centered());
+                
+        AnsiConsole.Write(
+            new Rule()
+                .Centered()
+                .RuleStyle(Style.Parse("green")));
+        AnsiConsole.WriteLine();
     }
-
+    
+    /// <summary>
+    /// Konfigurerer en tabell med standard formatering for konsistent visuell presentasjon.
+    /// </summary>
+    /// <param name="tittel">Tittelen som skal vises over tabellen.</param>
+    /// <returns>En forhåndskonfigurert tabell klar til å legge til kolonner og rader.</returns>
+    private Table CreateStandardTable(string tittel)
+    {
+        var table = new Table();
+        table.Title = new TableTitle($"[bold]{tittel}[/]");
+        table.Border(TableBorder.Rounded);
+        table.Width = GetConsoleWidth();
+        table.Border(TableBorder.DoubleEdge);
+        return table;
+    }
+    
+    /// <summary>
+    /// Oppretter en standard konfigurasjon for valgmenyer med konsistent utseende.
+    /// </summary>
+    /// <param name="tittel">Spørsmålet eller tittelen som vises over valgalternativene.</param>
+    /// <returns>En forhåndskonfigurert SelectionPrompt klar til å legge til valgalternativer.</returns>
+    private SelectionPrompt<string> CreateStandardMenu(string tittel)
+    {
+        return new SelectionPrompt<string>()
+            .Title($"[green]{tittel}[/]")
+            .PageSize(10)
+            .HighlightStyle(new Style(Color.Green))
+            .WrapAround();
+    }
+    
+    /// <summary>
+    /// Viser overskriften for stillingstittel-skjermen med FigletText.
+    /// </summary>
+    private void ShowJobTitleHeader()
+    {
+        AnsiConsole.Write(
+            new FigletText("Stillinger")
+                .Color(Color.Green)
+                .Centered());
+                
+        AnsiConsole.Write(
+            new Rule()
+                .Centered()
+                .RuleStyle(Style.Parse("green")));
+        AnsiConsole.WriteLine();
+    }
+    
     /// <summary>
     /// Lar brukeren velge en stillingstittel og viser søkere som er matchet med stillinger med den valgte tittelen.
     /// Gir brukeren muligheten til å filtrere resultater og se detaljert informasjon om matchinger for en spesifikk stillingstittel.
     /// </summary>
-    private void VelgStillingstittel()
+    private void SelectJobTitle()
     {
         while (true)
         {
             // Henter alle unike stillingstitler for filtrering
-            List<string> titler = _matches
+            List<string> titles = _matches
                 .Select(m => m.MatchedPosition.Title)
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .OrderBy(t => t)
                 .ToList();
 
-            if (titler.Count == 0)
+            if (titles.Count == 0)
             {
                 AnsiConsole.MarkupLine("[red]Ingen stillingstitler funnet.[/]");
                 AnsiConsole.MarkupLine("\n[grey]Trykk en tast for å gå tilbake...[/]");
@@ -231,38 +276,32 @@ public class Menu
             }
 
             // Legger til mulighet for å gå tilbake til hovedmenyen
-            titler.Add("Gå tilbake");
+            titles.Add("Gå tilbake");
 
             AnsiConsole.Clear();
-            var rule = new Rule("[bold green]Velg en stillingstittel[/]")
-                .LeftJustified() // Venstrejustert tittel for konsistent design
-                .RuleStyle(Style.Parse("green"));
-            AnsiConsole.Write(rule);
-            AnsiConsole.WriteLine();
+            
+            // Viser stillingstittel-overskrift med FigletText for visuell konsistens
+            ShowJobTitleHeader();
 
             // Lar brukeren velge stillingstittel fra listen
-            var valgtTittel = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("[green]Velg stillingstittel:[/]")
-                    .PageSize(10)
-                    .HighlightStyle(new Style(Color.Green))
-                    .WrapAround()
-                    .AddChoices(titler));
+            var selectedTitle = AnsiConsole.Prompt(
+                CreateStandardMenu("Velg stillingstittel:")
+                    .AddChoices(titles));
 
-            if (valgtTittel == "Gå tilbake")
+            if (selectedTitle == "Gå tilbake")
             {
                 return;
             }
 
             // Filtrerer match basert på valgt stillingstittel
             List<(Applicant Applicant, Position MatchedPosition)> relevanteMatchinger = _matches
-                .Where(m => m.MatchedPosition.Title.Equals(valgtTittel, StringComparison.OrdinalIgnoreCase))
+                .Where(m => m.MatchedPosition.Title.Equals(selectedTitle, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             AnsiConsole.Clear();
 
             // Viser overskrift for den valgte stillingstittelen
-            var panel = new Panel($"[bold]Matchinger for stillingstittel \"{valgtTittel}\"[/]")
+            var panel = new Panel($"[bold]Matchinger for stillingstittel \"{selectedTitle}\"[/]")
             {
                 Border = BoxBorder.Rounded,
                 Padding = new Padding(1, 0, 1, 0),
@@ -298,15 +337,11 @@ public class Menu
 
             // Gir brukeren valg om å fortsette eller gå tilbake
             var choices = new[] { "Velg ny stillingstittel", "Gå til hovedmeny" };
-            var valg = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("[green]Hva vil du gjøre nå?[/]")
-                    .PageSize(10)
-                    .HighlightStyle(new Style(Color.Green))
-                    .WrapAround()
+            var selection = AnsiConsole.Prompt(
+                CreateStandardMenu("Hva vil du gjøre nå?")
                     .AddChoices(choices));
 
-            if (valg == "Gå til hovedmeny")
+            if (selection == "Gå til hovedmeny")
             {
                 return;
             }
