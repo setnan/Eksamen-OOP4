@@ -61,10 +61,10 @@ public static class UIHelper
         AnsiConsole.WriteLine();
         AnsiConsole.MarkupLine($"[bold underline]{uiConfig.Labels.AsciiValues}[/]");
 
-        Table table = new Table();
+        Table table = new();
         table.AddColumn(uiConfig.TableHeaders.Input);        // Tegn
         table.AddColumn(uiConfig.TableHeaders.Description);  // Beskriver om tegnet er stor eller liten bokstav
-        table.AddColumn(uiConfig.TableHeaders.Output);       // ASCII-verdi
+        table.AddColumn(uiConfig.TableHeaders.Output);       // Korresponderende ASCII-verdi
 
         foreach (char character in input)
         {

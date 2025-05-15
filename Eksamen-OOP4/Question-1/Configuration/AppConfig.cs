@@ -3,7 +3,7 @@ using System.Text.Json;
 namespace Question_1.Configuration;
 
 /// <summary>
-/// Representerer konfigurasjonen til applikasjonen, inkludert apptekst og UI-innstillinger.
+/// Beskriver og laster inn applikasjonskonfigurasjon, inkludert tittel, beskrivelse og UI-innstillinger.
 /// </summary>
 public class AppConfig
 {
@@ -59,7 +59,7 @@ public class AppConfig
 /// </summary>
 public class AppSettings
 {
-    public string AppName { get; set; } = "ASCII og Luhn Algoritme Kalkulator\n";
+    public string AppName { get; set; } = "ASCII og Luhn Algoritme Kalkulator";
 
     public string AppDescription { get; set; } = "Dette programmet konverterer tekst til ASCII-verdier og beregner et sjekksiffer ved hjelp av Luhn-algoritmen.";
 }

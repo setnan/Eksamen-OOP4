@@ -22,14 +22,13 @@ namespace Question_1
             AppConfig config = AppConfig.Load();
             UISettings uiConfig = config.UI;
 
-            // Vis header
+            // Viser header "ASCII og Luhn Algoritme Kalkulato"
             UIHelper.DisplayHeader(config.AppSettings);
 
             // Initialiserer konverterere
             AsciiConverter converter = new();
             LuhnCalculator calculator = new();
-
-            // Hovedloop
+            
             while (true)
             {
                 string input = UIHelper.GetUserInput(uiConfig.Prompts, uiConfig.Colors);
@@ -50,21 +49,24 @@ namespace Question_1
                         // Konverter til ASCII-streng
                         string asciiDigits = converter.ConvertToAscii(input);
 
-                        // Beregn sjekksiffer
+                        // Beregner sjekksiffer
                         int checkDigit = calculator.CalculateCheckDigit(asciiDigits);
 
-                        // Vis resultater
+                        // Viser resultatet
                         UIHelper.DisplayResults(asciiDigits, checkDigit, uiConfig);
                     }
                     catch (Exception ex)
                     {
+                        // Viser en generell feilmelding dersom noe uforutsett skjer
                         AnsiConsole.MarkupLine($"[{uiConfig.Colors.Error}]En feil oppstod: {ex.Message}[/]");
                     }
-                }
+                } 
+                // Viser feilmelding dersom brukeren gir ugyldig eller tom input
                 else
                 {
                     AnsiConsole.MarkupLine($"[{uiConfig.Colors.Error}]{uiConfig.Prompts.InvalidInputError}[/]\n");
                 }
+
             }
         }
     }
