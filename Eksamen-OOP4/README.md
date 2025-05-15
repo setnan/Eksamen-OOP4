@@ -99,6 +99,45 @@ dotnet run
 Etter oppstart:
 1. Skriv inn et ord eller navn når du blir bedt om det
 2. Se den visuelle fremstillingen av ASCII-konverteringen
+
+#### Question-2 (API Interaksjon og Matching)
+
+```bash
+cd Question-2
+dotnet run
+```
+
+##### Bruk av miljøvariabler for API-konfigurasjon
+
+Løsningen støtter bruk av miljøvariabler for API-konfigurasjon, som er foretrukket fremfor hardkodede verdier. For å sette miljøvariabler i PowerShell:
+
+```powershell
+# Setter miljøvariabler for API-konfigurasjon
+$env:EXAM_API_KEY="b569e4f6-77c2-475a-bf77-d15e81dd4dbd"
+$env:EXAM_API_URL="exam.05093218.nip.io/api/ExamTask"
+
+# Kjør applikasjonen etter å ha satt miljøvariabler
+dotnet run
+```
+
+For Command Prompt:
+```cmd
+SET EXAM_API_KEY=b569e4f6-77c2-475a-bf77-d15e81dd4dbd
+SET EXAM_API_URL=exam.05093218.nip.io/api/ExamTask
+dotnet run
+```
+
+Hvis miljøvariabler ikke er satt, vil applikasjonen bruke standardverdiene fra appsettings.json.
+
+## Preferert operativsystem
+Denne løsningen er utviklet og testet på Windows. Jeg foretrekker at den vurderes på Windows-plattformen.
+
+## Bruk av AI
+I utviklingen av denne oppgaven har jeg benyttet følgende AI-verktøy:
+
+- **OpenAI's ChatGPT**: Brukt for å forbedre UI med Spectre.Console, refaktorere metodenavn fra norsk til engelsk, og generelle forbedringer i brukergrensesnittet.
+
+[Her kan du legge til mer spesifikk informasjon om hvilke deler av koden som ble påvirket av AI-assistanse, eller angi at "Jeg har ikke brukt AI for denne oppgaven" hvis det er tilfelle]
 3. Se resultatet av Luhn-algoritmen med sjekksifferet
 4. Skriv 'Q' for å avslutte programmet
 
