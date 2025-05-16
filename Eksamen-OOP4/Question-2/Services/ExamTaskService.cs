@@ -50,7 +50,7 @@ public class ExamTaskService
             HttpResponseMessage response = await _httpClient.GetAsync(_apiUrl);
             response.EnsureSuccessStatusCode();
 
-            using var stream = await response.Content.ReadAsStreamAsync();
+            using Stream stream = await response.Content.ReadAsStreamAsync();
             ExamData? data = await JsonSerializer.DeserializeAsync<ExamData>(stream, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true

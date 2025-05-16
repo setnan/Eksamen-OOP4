@@ -14,38 +14,32 @@ public class Menu
 {
     /// <summary>
     /// Liste over matchede søkere og stillingsposisjoner som brukes i alle menymetoder.
-    /// Inneholder tupler av søkere og stillinger som har blitt matchet av algoritmen.
     /// </summary>
     private readonly List<(Applicant Applicant, Position MatchedPosition)> _matches;
-    
+
     /// <summary>
     /// Henter bredden på konsolvinduet eller returnerer en sikker standardverdi.
     /// </summary>
-    /// <returns>Konsollbredde minus en sikkerhetmargin, eller standardverdi ved feil.</returns>
     private int GetConsoleWidth()
     {
         try
         {
-            // Bruker faktisk konsollbredde, men reduserer med en margin på 5 tegn for sikkerhet
-            int width = Console.WindowWidth - 5;
+            int width = Console.WindowWidth - 5; // Reduserer med en margin for sikkerhet
             
-            // Sikrer at vi ikke går under minimumbredde eller over maksbredde
             if (width < 60) return 60; // Minimum bredde
             if (width > 150) return 150; // Maksimum bredde for lesbarhet
-            
+
             return width;
         }
         catch
         {
-            // Fallback hvis vi ikke kan lese konsollbredden
-            return 80;
+            return 60; // Fallback hvis vi ikke kan lese konsollbredden
         }
     }
 
     /// <summary>
     /// Initialiserer en ny instans av menyhåndtereren med en liste over matchede søkere og stillinger.
     /// </summary>
-    /// <param name="matches">Liste over tuples som inneholder søkere med matchede stillinger.</param>
     public Menu(List<(Applicant, Position)> matches)
     {
         _matches = matches;
@@ -53,11 +47,9 @@ public class Menu
 
     /// <summary>
     /// Viser hovedmenyen og håndterer brukerens interaksjon med den.
-    /// Fungerer som en løkke som fortsetter å vise menyalternativer til brukeren velger å avslutte.
     /// </summary>
     public void Show()
     {
-        // Definerer hovedmenyalternativene
         List<string> options = new()
         {
             "Vis alle søkere",
@@ -69,17 +61,12 @@ public class Menu
         while (true)
         {
             AnsiConsole.Clear();
-            
-            // Viser applikasjonens hovedtittel
             ShowMainTitle();
 
-            // Gir brukeren mulighet til å velge menyalternativer med piltaster
             string selected = AnsiConsole.Prompt(
                 CreateStandardMenu("Velg et alternativ:")
                     .AddChoices(options));
 
-            // Utfører handling basert på brukerens valg
-            // Legger til hver søker som en rad i tabellen med navn, ønsket stilling, spesialisering og ferdigheter
             switch (options.IndexOf(selected))
             {
                 case 0:
@@ -104,22 +91,17 @@ public class Menu
 
     /// <summary>
     /// Viser en tabell med alle søkere i systemet og deres ønskede stillingsdetaljer.
-    /// Presenterer informasjonen i et strukturert tabellformat ved hjelp av Spectre.Console.
     /// </summary>
     private void ShowAllApplicants()
     {
-        // Henter unike søkere fra matchingslisten 
         List<Applicant> allApplicants = _matches
             .Select(m => m.Applicant)
             .Distinct()
             .ToList();
 
         AnsiConsole.Clear();
-
-        // Oppretter tabell for strukturert visning av søkerinformasjon
         Table table = CreateStandardTable($"Viser {allApplicants.Count} søkere");
 
-        // Definerer kolonner for tabellen
         table.AddColumn(new TableColumn("[green]Navn[/]").Centered());
         table.AddColumn(new TableColumn("[green]Ønsket stilling[/]").Centered());
         table.AddColumn(new TableColumn("[green]Spesialisering[/]").Centered());
@@ -127,14 +109,13 @@ public class Menu
 
         foreach (Applicant applicant in allApplicants)
         {
-            Position desired = applicant.DesireedPosition;
+            Position disireed = applicant.DesireedPosition;
 
-            // Legger til rad for hver søker i tabellen
             table.AddRow(
                 $"[bold]{applicant.FirstName} {applicant.LastName}[/]",
-                $"{desired.Title} ({desired.Seniority})",
-                desired.Specialization,
-                FormatSkills(desired.Skills, 3)); // Viser maks 3 ferdigheter for å holde linjen kort
+                $"{disireed.Title} ({disireed.Seniority})",
+                disireed.Specialization,
+                FormatSkills(disireed.Skills, 3)); // Begrenser til 3 ferdigheter for bedre lesbarhet
         }
 
         AnsiConsole.Write(table);
@@ -142,16 +123,12 @@ public class Menu
 
     /// <summary>
     /// Viser en tabell med alle matcher mellom søkere og stillinger.
-    /// Presenterer informasjonen i et strukturert tabellformat ved hjelp av Spectre.Console.
     /// </summary>
     private void ShowAllMatches()
     {
         AnsiConsole.Clear();
-
-        // Oppretter tabell for å vise alle matcher mellom søkere og stillinger
         Table table = CreateStandardTable($"Totalt {_matches.Count} matcher");
 
-        // Definerer kolonner for tabellen
         table.AddColumn(new TableColumn("[green]Søker[/]").Centered());
         table.AddColumn(new TableColumn("[green]Matchet med stilling[/]").Centered());
         table.AddColumn(new TableColumn("[green]Seniority[/]").Centered());
@@ -161,14 +138,12 @@ public class Menu
         {
             foreach ((Applicant applicant, Position position) in _matches)
             {
-                // Validerer data før de vises
                 string firstName = string.IsNullOrEmpty(applicant.FirstName) ? "[grey](Ikke angitt)[/]" : applicant.FirstName;
                 string lastName = string.IsNullOrEmpty(applicant.LastName) ? "[grey](Ikke angitt)[/]" : applicant.LastName;
                 string title = string.IsNullOrEmpty(position.Title) ? "[grey](Ikke angitt)[/]" : position.Title;
                 string seniority = string.IsNullOrEmpty(position.Seniority) ? "[grey](Ikke angitt)[/]" : position.Seniority;
                 string specialization = string.IsNullOrEmpty(position.Specialization) ? "[grey](Ikke angitt)[/]" : position.Specialization;
 
-                // Legger til rad for hver match i tabellen
                 table.AddRow(
                     $"[bold]{firstName} {lastName}[/]",
                     title,
@@ -183,48 +158,39 @@ public class Menu
 
         AnsiConsole.Write(table);
     }
-    
+
     /// <summary>
     /// Formaterer en liste med ferdigheter til en kort, lesbar streng.
     /// </summary>
-    /// <param name="skills">Listen med ferdigheter.</param>
-    /// <param name="maxCount">Maksimalt antall ferdigheter som skal vises.</param>
-    /// <returns>En formatert streng med ferdigheter, begrenset til angitt antall.</returns>
     private string FormatSkills(List<string> skills, int maxCount)
     {
         if (skills == null || skills.Count == 0)
-            return "(Ingen)"; // Hvis ingen ferdigheter er angitt
-            
+            return "(Ingen)";
+
         if (skills.Count <= maxCount)
-            return string.Join(", ", skills); // Vis alle hvis det er færre enn maksimum
-            
-        // Hvis det er flere enn maksimum, vis kun de første og legg til ellipsis
-        var visibleSkills = skills.Take(maxCount).ToList();
+            return string.Join(", ", skills);
+
+        List<string> visibleSkills = skills.Take(maxCount).ToList();
         return string.Join(", ", visibleSkills) + $" +{skills.Count - maxCount} flere";
     }
-    
-    /// <summary>
-    /// Viser applikasjonens hovedtittel med FigletText for visuell effekt.
-    /// </summary>
+
     private void ShowMainTitle()
     {
         AnsiConsole.Write(
             new FigletText("JOB-MATCH")
                 .Color(Color.Green)
                 .Centered());
-        
+
         AnsiConsole.Write(
             new Rule()
                 .Centered()
                 .RuleStyle(Style.Parse("green")));
         AnsiConsole.WriteLine();
     }
-    
+
     /// <summary>
     /// Konfigurerer en tabell med standard formatering for enhetlig visuell presentasjon.
     /// </summary>
-    /// <param name="tittel">Tittelen som skal vises over tabellen.</param>
-    /// <returns>En forhåndskonfigurert tabell klar til å legge til kolonner og rader.</returns>
     private Table CreateStandardTable(string tittel)
     {
         Table table = new Table();
@@ -234,12 +200,10 @@ public class Menu
         table.Border(TableBorder.DoubleEdge);
         return table;
     }
-    
+
     /// <summary>
     /// Oppretter en standard konfigurasjon for valgmenyer og konsistent utseende.
     /// </summary>
-    /// <param name="tittel">Spørsmålet eller tittelen som vises over valgalternativene.</param>
-    /// <returns>En forhåndskonfigurert SelectionPrompt klar til å legge til valgalternativer.</returns>
     private SelectionPrompt<string> CreateStandardMenu(string tittel)
     {
         return new SelectionPrompt<string>()
@@ -248,33 +212,28 @@ public class Menu
             .HighlightStyle(new Style(Color.Green))
             .WrapAround();
     }
-    
-    /// <summary>
-    /// Viser overskriften for stillingstittel-skjermen med FigletText.
-    /// </summary>
+
     private void ShowJobTitleHeader()
     {
         AnsiConsole.Write(
             new FigletText("Stillinger")
                 .Color(Color.Green)
                 .Centered());
-                
+
         AnsiConsole.Write(
             new Rule()
                 .Centered()
                 .RuleStyle(Style.Parse("green")));
         AnsiConsole.WriteLine();
     }
-    
+
     /// <summary>
-    /// Lar brukeren velge en stillingstittel og viser søkere som er matchet med stillinger med den valgte tittelen.
-    /// Gir brukeren muligheten til å filtrere resultater og se detaljert informasjon om match for en spesifikk stillingstittel.
+    /// Lar brukeren velge en stillingstittel og viser matchende søkere for den valgte stillingen.
     /// </summary>
     private void SelectJobTitle()
     {
         while (true)
         {
-            // Henter alle unike stillingstitler for filtrering
             List<string> titles = _matches
                 .Select(m => m.MatchedPosition.Title)
                 .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -289,16 +248,12 @@ public class Menu
                 return;
             }
 
-            // Legger til mulighet for å gå tilbake til hovedmenyen
             titles.Add("Gå tilbake");
 
             AnsiConsole.Clear();
-            
-            // Viser stillingstittel-overskrift med FigletText for visuell konsistens
             ShowJobTitleHeader();
 
-            // Lar brukeren velge stillingstittel fra listen
-            var selectedTitle = AnsiConsole.Prompt(
+            string selectedTitle = AnsiConsole.Prompt(
                 CreateStandardMenu("Velg stillingstittel:")
                     .AddChoices(titles));
 
@@ -307,12 +262,11 @@ public class Menu
                 return;
             }
 
-            // Filtrerer match basert på valgt stillingstittel
             List<(Applicant Applicant, Position MatchedPosition)> relevanteMatcher = new();
-            try 
+            try
             {
                 relevanteMatcher = _matches
-                    .Where(m => m.MatchedPosition.Title != null && 
+                    .Where(m => m.MatchedPosition?.Title != null &&
                                m.MatchedPosition.Title.Equals(selectedTitle, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
@@ -323,12 +277,11 @@ public class Menu
 
             AnsiConsole.Clear();
 
-            // Viser overskrift for den valgte stillingstittelen
-            var panel = new Panel($"[bold]Matcher for stillingstittel \"{selectedTitle}\"[/]")
+            Panel panel = new($"[bold]Matcher for stillingstittel \"{selectedTitle}\"[/]")
             {
                 Border = BoxBorder.Rounded,
                 Padding = new Padding(1, 0, 1, 0),
-                Width = GetConsoleWidth() // Dynamisk tilpasset panelbredde
+                Width = GetConsoleWidth()
             };
             AnsiConsole.Write(panel);
 
@@ -338,25 +291,23 @@ public class Menu
             }
             else
             {
-                // Viser matchende søkere i tabellformat
-                var table = new Table();
+                Table table = new();
                 table.Border(TableBorder.Simple);
-                table.Width = GetConsoleWidth() - 4; // Vises litt mindre enn panelbredden for bedre visuell tilpasning
+                table.Width = GetConsoleWidth() - 4;
 
                 table.AddColumn(new TableColumn("[green]Søker[/]").Centered());
                 table.AddColumn(new TableColumn("[green]Seniority[/]").Centered());
                 table.AddColumn(new TableColumn("[green]Spesialisering[/]").Centered());
 
-                try 
+                try
                 {
                     foreach ((Applicant applicant, Position position) in relevanteMatcher)
                     {
-                        // Validerer data før de vises
                         string firstName = string.IsNullOrEmpty(applicant.FirstName) ? "[grey](Ikke angitt)[/]" : applicant.FirstName;
                         string lastName = string.IsNullOrEmpty(applicant.LastName) ? "[grey](Ikke angitt)[/]" : applicant.LastName;
                         string seniority = string.IsNullOrEmpty(position.Seniority) ? "[grey](Ikke angitt)[/]" : position.Seniority;
                         string specialization = string.IsNullOrEmpty(position.Specialization) ? "[grey](Ikke angitt)[/]" : position.Specialization;
-                        
+
                         table.AddRow(
                             $"[bold]{firstName} {lastName}[/]",
                             seniority,
@@ -371,9 +322,8 @@ public class Menu
                 AnsiConsole.Write(table);
             }
 
-            // Gir brukeren valg om å fortsette eller gå tilbake
-            var choices = new[] { "Velg ny stillingstittel", "Gå til hovedmeny" };
-            var selection = AnsiConsole.Prompt(
+            string[] choices = new[] { "Velg ny stillingstittel", "Gå til hovedmeny" };
+            string selection = AnsiConsole.Prompt(
                 CreateStandardMenu("Hva vil du gjøre nå?")
                     .AddChoices(choices));
 

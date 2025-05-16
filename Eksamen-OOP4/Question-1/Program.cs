@@ -1,7 +1,7 @@
 using System;
 using Question_1;
 using Question_1.Configuration;
-using Question_1.UI;
+using Question_1.Ui;
 using Spectre.Console;
 
 namespace Question_1
@@ -18,20 +18,17 @@ namespace Question_1
         /// <param name="args">Kommando-linje argumenter (ikke brukt).</param>
         static void Main(string[] args)
         {
-            // Laster konfigurasjon
             AppConfig config = AppConfig.Load();
-            UISettings uiConfig = config.UI;
-
-            // Viser header "ASCII og Luhn Algoritme Kalkulato"
-            UIHelper.DisplayHeader(config.AppSettings);
-
-            // Initialiserer konverterere
+            UiSettings uiConfig = config.Ui;
+            
+            UiHelper.DisplayHeader(config.AppSettings);
+            
             AsciiConverter converter = new();
             LuhnCalculator calculator = new();
             
             while (true)
             {
-                string input = UIHelper.GetUserInput(uiConfig.Prompts, uiConfig.Colors);
+                string input = UiHelper.GetUserInput(uiConfig.Prompts, uiConfig.Colors);
 
                 if (input.Equals("Q", StringComparison.OrdinalIgnoreCase))
                 {
@@ -44,16 +41,14 @@ namespace Question_1
                     try
                     {
                         // Viser ASCII-tabell
-                        UIHelper.DisplayAsciiTable(input, uiConfig);
+                        UiHelper.DisplayAsciiTable(input, uiConfig);
 
-                        // Konverterer til ASCII-streng
+                        // Konverter input og beregn sjekksiffer
                         string asciiDigits = converter.ConvertToAscii(input);
-
-                        // Beregner sjekksiffer
                         int checkDigit = calculator.CalculateCheckDigit(asciiDigits);
 
                         // Viser resultatet
-                        UIHelper.DisplayResults(asciiDigits, checkDigit, uiConfig);
+                        UiHelper.DisplayResults(asciiDigits, checkDigit, uiConfig);
                     }
                     catch (Exception ex)
                     {

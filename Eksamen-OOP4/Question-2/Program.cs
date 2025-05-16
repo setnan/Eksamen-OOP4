@@ -17,14 +17,11 @@ namespace Question_2
         /// <param name="args">Kommandolinjeargumenter (ikke brukt).</param>
         static async Task Main(string[] args)
         {
-            // Setter både input og output encoding til UTF-8 for støtte av norske tegn (æøå)
             Console.InputEncoding = System.Text.Encoding.UTF8;
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             
-            // Setter konsolltittel
             Console.Title = "JOB-MATCH - Søker/Stilling Matchmaking System";
             
-            // Oppretter tjeneste for å hente data fra API
             ExamTaskService service = new();
             ExamData? data = null;
             
@@ -54,7 +51,7 @@ Sjekk API-nøkkel, URL, modellstruktur og nettverkstilkobling.");
                 return;
             }
 
-            // Starter match-prosessen med visuell statusindikator
+            // Starter matching med visuell fremdrift
             MatchService matcher = new();
             List<(Applicant Applicant, Position MatchedPosition)> matches = null!;
 

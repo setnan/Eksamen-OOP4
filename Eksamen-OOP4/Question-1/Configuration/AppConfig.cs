@@ -3,31 +3,21 @@ using System.Text.Json;
 namespace Question_1.Configuration;
 
 /// <summary>
-/// Beskriver og laster inn applikasjonskonfigurasjon, inkludert tittel, beskrivelse og UI-innstillinger.
+/// Håndterer applikasjonskonfigurasjon inkludert tittel, beskrivelse og Ui-innstillinger.
 /// </summary>
 public class AppConfig
 {
-    /// <summary>
-    /// Inneholder navn og beskrivelse av applikasjonen.
-    /// </summary>
     public AppSettings AppSettings { get; set; } = new AppSettings();
+    public UiSettings Ui { get; set; } = new UiSettings();
 
     /// <summary>
-    /// Inneholder farger, tekster og etiketter brukt i brukergrensesnittet.
+    /// Laster inn konfigurasjon fra appsettings.json-filen med fallback til standardverdier.
     /// </summary>
-    public UISettings UI { get; set; } = new UISettings();
-
-    /// <summary>
-    /// Leser og laster inn konfigurasjon fra appsettings.json-filen.
-    /// Faller tilbake på standardverdier dersom filen mangler eller er ugyldig.
-    /// </summary>
-    /// <returns>Et AppConfig-objekt med verdier fra fil eller standardverdier.</returns>
+    /// <returns>Et AppConfig-objekt med konfigurasjonsdata.</returns>
     public static AppConfig Load()
     {
-        // Standardsti der filen vanligvis ligger
         string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
 
-        // Hvis filen ikke finnes der, prøv arbeidskatalogen
         if (!File.Exists(filePath))
         {
             filePath = "appsettings.json";
@@ -43,7 +33,6 @@ public class AppConfig
 
         try
         {
-            // Prøv å deserialisere JSON til AppConfig
             return JsonSerializer.Deserialize<AppConfig>(json) ?? new AppConfig();
         }
         catch (Exception ex)
@@ -55,19 +44,18 @@ public class AppConfig
 }
 
 /// <summary>
-/// Inneholder navn og beskrivelse av applikasjonen.
+/// Inneholder applikasjonsnavn og beskrivelse for visning.
 /// </summary>
 public class AppSettings
 {
     public string AppName { get; set; } = "ASCII og Luhn Algoritme Kalkulator";
-
     public string AppDescription { get; set; } = "Dette programmet konverterer tekst til ASCII-verdier og beregner et sjekksiffer ved hjelp av Luhn-algoritmen.";
 }
 
 /// <summary>
-/// Samler alle brukergrensesnittelementer som farger, meldinger og etiketter.
+/// Konfigurasjon for farger, meldinger og etiketter brukt i brukergrensesnittet.
 /// </summary>
-public class UISettings
+public class UiSettings
 {
     public ColorSettings Colors { get; set; } = new ColorSettings();
     public PromptSettings Prompts { get; set; } = new PromptSettings();
@@ -76,7 +64,7 @@ public class UISettings
 }
 
 /// <summary>
-/// Definerer fargene brukt i konsollgrensesnittet.
+/// Fargetema for ulike teksttyper i konsollgrensesnittet.
 /// </summary>
 public class ColorSettings
 {
@@ -88,7 +76,7 @@ public class ColorSettings
 }
 
 /// <summary>
-/// Inneholder alle meldinger som vises til brukeren.
+/// Tekstmeldinger og feilmeldinger brukt i konsollinteraksjon.
 /// </summary>
 public class PromptSettings
 {
@@ -99,13 +87,13 @@ public class PromptSettings
     public string EndMessage { get; set; } = "Trykk en tast for å avslutte...";
 
     /// <summary>
-    /// Parameterløs konstruktør kreves for deserialisering.
+    /// Parameterløs konstruktør for JSON-deserialisering.
     /// </summary>
     public PromptSettings() { }
 }
 
 /// <summary>
-/// Definerer kolonneoverskrifter brukt i ASCII-tabellen.
+/// Kolonneoverskrifter brukt i ASCII-tabellen.
 /// </summary>
 public class TableHeaderSettings
 {
@@ -115,7 +103,7 @@ public class TableHeaderSettings
 }
 
 /// <summary>
-/// Definerer etiketter brukt ved visning av resultater.
+/// Etiketter for visning av resultatdata.
 /// </summary>
 public class LabelSettings
 {
